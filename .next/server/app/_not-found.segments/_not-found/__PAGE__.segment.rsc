@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[98500,["500","static/chunks/500-538c95708a3502e8.js","345","static/chunks/app/not-found-872b07e0e4a41daa.js"],""]
+3:I[90484,[],"OutletBoundary"]
+4:"$Sreact.suspense"
+0:{"buildId":"gKhGwV-fIk7oPUaCgEgpF","rsc":["$","$1","c",{"children":[["$","div",null,{"className":"min-h-screen flex items-center justify-center bg-background text-foreground","children":["$","div",null,{"className":"text-center space-y-4","children":[["$","h1",null,{"className":"text-4xl font-bold","children":"Page Not Found"}],["$","p",null,{"className":"text-muted-foreground","children":"The page you're looking for doesn't exist or has been moved."}],["$","$L2",null,{"href":"/","children":["$","button",null,{"className":"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover-elevate active-elevate-2 bg-primary text-primary-foreground border border-primary-border min-h-9 px-4 py-2","children":"Back to Home"}]}]]}]}],null,["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"loading":null,"isPartial":false}
+5:null

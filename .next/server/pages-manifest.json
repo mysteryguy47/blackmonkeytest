@@ -3,6 +3,7 @@
   "/_error": "pages/_error.js",
   "/api/verify-order": "pages/api/verify-order.js",
   "/api/create-order": "pages/api/create-order.js",
-  "/payment-result": "pages/payment-result.js",
-  "/_document": "pages/_document.js"
+  "/payment-result": "pages/payment-result.html",
+  "/_document": "pages/_document.js",
+  "/404": "pages/404.html"
 }

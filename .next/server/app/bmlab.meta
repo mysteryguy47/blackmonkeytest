@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/bmlab/layout,_N_T_/bmlab/page,_N_T_/bmlab"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/bmlab/__PAGE__",
+    "/bmlab",
+    "/_index",
+    "/_head"
+  ]
+}

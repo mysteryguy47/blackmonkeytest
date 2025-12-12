@@ -1,0 +1,13 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/blog/page": "/blog",
+  "/contact/page": "/contact",
+  "/courses/ananta/page": "/courses/ananta",
+  "/courses/garuda/page": "/courses/garuda",
+  "/courses/shunya/page": "/courses/shunya",
+  "/courses/yantra/page": "/courses/yantra",
+  "/page": "/",
+  "/course/[id]/page": "/course/[id]",
+  "/courses/chakra/page": "/courses/chakra",
+  "/bmlab/page": "/bmlab"
+}

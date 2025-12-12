@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/courses/layout,_N_T_/courses/shunya/layout,_N_T_/courses/shunya/page,_N_T_/courses/shunya"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/courses/shunya/__PAGE__",
+    "/courses/shunya",
+    "/courses",
+    "/_index",
+    "/_head"
+  ]
+}

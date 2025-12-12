@@ -72,6 +72,51 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
   type __Unused = __Check
 }
 
+// Validate ../../app/courses/ananta/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/courses/ananta">> = Specific
+  const handler = {} as typeof import("../../app/courses/ananta/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/courses/chakra/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/courses/chakra">> = Specific
+  const handler = {} as typeof import("../../app/courses/chakra/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/courses/garuda/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/courses/garuda">> = Specific
+  const handler = {} as typeof import("../../app/courses/garuda/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/courses/shunya/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/courses/shunya">> = Specific
+  const handler = {} as typeof import("../../app/courses/shunya/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/courses/yantra/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/courses/yantra">> = Specific
+  const handler = {} as typeof import("../../app/courses/yantra/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/">> = Specific
