@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { coursesData } from "@shared/schema";
 import { CustomCursor } from "@/components/CustomCursor";
@@ -34,10 +34,21 @@ const iconMap: Record<string, any> = {
 export default function CoursePage({ params }: any) {
   const courseId = params.id;
   const course = coursesData.find((c) => c.id === courseId);
+  const router = useRouter();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [courseId]);
+
+  const handleBackToCourses = () => {
+    router.push("/");
+    setTimeout(() => {
+      const coursesSection = document.getElementById("courses");
+      if (coursesSection) {
+        coursesSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 100);
+  };
 
   if (!course) {
     return (
@@ -67,16 +78,15 @@ export default function CoursePage({ params }: any) {
 
       <main className="relative z-10 pt-32 pb-20">
         <div className="max-w-6xl mx-auto px-6">
-          <Link href="/">
-            <Button
-              variant="ghost"
-              className="mb-8"
-              data-testid="button-back-home"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Courses
-            </Button>
-          </Link>
+          <Button
+            variant="ghost"
+            className="mb-8"
+            onClick={handleBackToCourses}
+            data-testid="button-back-home"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Courses
+          </Button>
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}

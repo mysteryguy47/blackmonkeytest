@@ -16,7 +16,6 @@ import { type Course } from "@shared/schema";
 import { Manifesto } from "@/components/Manifesto";
 import DarkVeil from "@/components/DarkVeil";
 import Nav from "@/components/Nav";
-import ScrollStack, { ScrollStackItem } from '@/components/ScrollStack'
 import ScrollRestoration from "./scroll-restoration";
 import CheckoutButton from "@/components/CheckoutButton";
 
@@ -49,20 +48,6 @@ export default function HomePage() {
           <Hero />
           <Manifesto />
           <CheckoutButton />
-          <ScrollStack>
-            <ScrollStackItem>
-              <h2>Card 1</h2>
-              <p>This is the first card in the stack</p>
-            </ScrollStackItem>
-            <ScrollStackItem>
-              <h2>Card 2</h2>
-              <p>This is the second card in the stack</p>
-            </ScrollStackItem>
-            <ScrollStackItem>
-              <h2>Card 3</h2>
-              <p>This is the third card in the stack</p>
-            </ScrollStackItem>
-          </ScrollStack>
           <STEMCards />
           <CoursesSection onCourseSelect={handleCourseSelect} />
           <OriginStory />

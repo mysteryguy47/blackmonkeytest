@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Course } from "@shared/schema";
 import { Zap, Bot, Wifi, Network, Plane, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { useSound } from "@/hooks/use-sound";
+import Link from "next/link";
 
 const iconMap: Record<string, any> = {
   Zap,
@@ -173,24 +175,29 @@ export function EnhancedCourseCard({ course, index, onSelect }: EnhancedCourseCa
               {course.tagline}
             </motion.p>
 
-            {/* CTA */}
+            {/* CTA Button */}
             <motion.div
-              className="font-tech flex items-center text-muted-foreground group-hover:text-foreground transition-colors cursor-pointer"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              onClick={() => {
-                play("click");
-              }}
             >
-              <span className="text-sm font-bold">Explore Now</span>
-              <motion.div
-                className="ml-2"
-                initial={{ x: 0 }}
-                whileHover={{ x: 5 }}
+              <Link
+                href={`/courses/${course.id}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  play("click");
+                }}
+                className="font-tech flex items-center text-muted-foreground group-hover:text-foreground transition-colors cursor-pointer"
               >
-                <ArrowRight className="w-4 h-4" />
-              </motion.div>
+                <span className="text-sm font-bold">Explore Now</span>
+                <motion.div
+                  className="ml-2"
+                  initial={{ x: 0 }}
+                  whileHover={{ x: 5 }}
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </motion.div>
+              </Link>
             </motion.div>
           </div>
         </Card>

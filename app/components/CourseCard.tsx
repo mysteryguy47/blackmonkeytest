@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Course } from "@shared/schema";
 import { Zap, Bot, Wifi, Network, Plane, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { useSound } from "@/hooks/use-sound";
+import Link from "next/link";
 
 const iconMap: Record<string, any> = {
   Zap,
@@ -91,16 +93,34 @@ export function CourseCard({ course, index, onSelect }: CourseCardProps) {
               {course.tagline}
             </p>
 
-            <div className="flex items-center text-muted-foreground group-hover:text-foreground transition-colors">
-              <span className="text-sm font-medium">Learn More</span>
-              <motion.div
-                className="ml-2"
-                initial={{ x: 0 }}
-                whileHover={{ x: 5 }}
+            <Link 
+              href={`/courses/${course.id}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                play("click");
+              }}
+            >
+              <Button
+                className="w-full font-tech transition-all duration-300"
+                style={{
+                  background: `linear-gradient(135deg, ${course.neonColor}20, ${course.neonColor}10)`,
+                  border: `1px solid ${course.neonColor}40`,
+                  color: course.neonColor,
+                }}
+                onMouseEnter={() => {
+                  play("hover");
+                }}
               >
-                <ArrowRight className="w-4 h-4" />
-              </motion.div>
-            </div>
+                <span className="text-sm font-medium">View Course Details</span>
+                <motion.div
+                  className="ml-2"
+                  initial={{ x: 0 }}
+                  whileHover={{ x: 5 }}
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </motion.div>
+              </Button>
+            </Link>
           </div>
         </Card>
       </motion.div>

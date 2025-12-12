@@ -16,11 +16,11 @@ export function Footer() {
 
   const footerLinks = {
     courses: [
-      { label: "Shunya - Paper Circuits", path: "/course/shunya" },
-      { label: "Chakra - Robotics", path: "/course/chakra" },
-      { label: "Yantra - IoT", path: "/course/yantra" },
-      { label: "Ananta - Advanced IoT", path: "/course/ananta" },
-      { label: "Garuda - Drones", path: "/course/garuda" },
+      { label: "Shunya - Paper Circuits", path: "/courses/shunya" },
+      { label: "Chakra - Robotics", path: "/courses/chakra" },
+      { label: "Yantra - IoT", path: "/courses/yantra" },
+      { label: "Ananta - Advanced IoT", path: "/courses/ananta" },
+      { label: "Garuda - Drones", path: "/courses/garuda" },
     ],
     company: [
       { label: "About Us", path: "/#story" },
@@ -37,11 +37,11 @@ export function Footer() {
   };
 
   const socialLinks = [
-    { icon: Facebook, href: "#", label: "Facebook" },
-    { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Instagram, href: "#", label: "Instagram" },
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: Youtube, href: "#", label: "YouTube" },
+    { icon: Facebook, href: "#", label: "Facebook", color: "rgb(59, 89, 152)" },
+    { icon: Twitter, href: "#", label: "Twitter", color: "rgb(29, 161, 242)" },
+    { icon: Instagram, href: "#", label: "Instagram", color: "rgb(225, 48, 108)" },
+    { icon: Linkedin, href: "#", label: "LinkedIn", color: "rgb(40, 103, 178)" },
+    { icon: Youtube, href: "#", label: "YouTube", color: "rgb(255, 0, 0)" },
   ];
 
   return (
@@ -69,7 +69,7 @@ export function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
           <div>
             <h3 className="font-display text-2xl font-bold mb-6">
               <span className="font-tech bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent">
@@ -87,7 +87,7 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-neon-purple" />
-                <span>info@blackmonkey.in</span>
+                <span>ignite@blackmonkey.in</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-neon-purple" />
@@ -128,6 +128,32 @@ export function Footer() {
           </div>
 
           <div>
+            <h4 className="font-tech font-semibold text-foreground mb-6">Legal</h4>
+            <ul className="font-mono space-y-3">
+              <li>
+                <a href="#" className="text-sm text-muted-foreground hover:text-neon-purple transition-colors" data-testid="link-footer-privacy">
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-sm text-muted-foreground hover:text-neon-purple transition-colors" data-testid="link-footer-terms">
+                  Terms of Service
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-sm text-muted-foreground hover:text-neon-purple transition-colors" data-testid="link-footer-refunds">
+                  Refunds &amp; Cancellations
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-sm text-muted-foreground hover:text-neon-purple transition-colors" data-testid="link-footer-cookies">
+                  Cookies
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
             <h4 className="font-tech font-semibold text-foreground mb-6">Stay Updated</h4>
             <p className="font-mono text-sm text-muted-foreground mb-4">
               Subscribe to our newsletter for the latest updates and exclusive content.
@@ -158,12 +184,27 @@ export function Footer() {
                 <motion.a
                   key={social.label}
                   href={social.href}
-                  className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground hover:text-neon-purple hover:bg-neon-purple/10 transition-all duration-300"
-                  whileHover={{ scale: 1.1 }}
+                  className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground transition-all duration-300"
+                  style={{
+                    boxShadow: `0 0 8px ${social.color}40, inset 0 0 4px ${social.color}20`,
+                    border: `1px solid ${social.color}50`,
+                    background: `radial-gradient(circle at 30% 30%, ${social.color}15, transparent 55%)`,
+                  }}
+                  whileHover={{
+                    scale: 1.15,
+                    boxShadow: [
+                      `0 0 10px ${social.color}40`,
+                      `0 0 20px ${social.color}60`,
+                      `0 0 30px ${social.color}80`,
+                    ],
+                  }}
                   whileTap={{ scale: 0.95 }}
                   data-testid={`link-social-${social.label.toLowerCase()}`}
                 >
-                  <social.icon className="w-5 h-5" />
+                  <social.icon
+                    className="w-5 h-5"
+                    style={{ color: social.color, filter: "drop-shadow(0 0 6px rgba(255,255,255,0.35))" }}
+                  />
                 </motion.a>
               ))}
             </div>
@@ -178,17 +219,6 @@ export function Footer() {
               <Heart className="h-3 w-3 text-primary fill-primary animate-pulse" />{" "}
               using NextJS + TypeScript
                 </p>
-            <div className="flex gap-6">
-              <a href="#" className="hover:text-foreground transition-colors" data-testid="link-footer-privacy">
-                Privacy Policy
-              </a>
-              <a href="#" className="hover:text-foreground transition-colors" data-testid="link-footer-terms">
-                Terms of Service
-              </a>
-              <a href="#" className="hover:text-foreground transition-colors" data-testid="link-footer-cookies">
-                Cookies
-              </a>
-            </div>
           </div>
         </div>
       </div>

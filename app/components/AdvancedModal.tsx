@@ -1,10 +1,10 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { X, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Course } from "@shared/schema";
 import { useSound } from "@/hooks/use-sound";
-import { EnrollmentForm } from "./EnrollmentForm";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import Link from "next/link";
 
 interface AdvancedModalProps {
   course: Course | null;
@@ -14,7 +14,6 @@ interface AdvancedModalProps {
 
 export function AdvancedModal({ course, isOpen, onClose }: AdvancedModalProps) {
   const { play } = useSound();
-  const [showEnrollForm, setShowEnrollForm] = useState(false);
 
   // ⬇️ ADD THIS HERE
   useEffect(() => {
@@ -159,66 +158,45 @@ export function AdvancedModal({ course, isOpen, onClose }: AdvancedModalProps) {
                   </div>
                 </motion.div>
 
-                {/* Enrollment Form or CTA */}
-                {showEnrollForm ? (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.35 }}
-                  >
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setShowEnrollForm(false)}
-                      className="font-mono mb-4 text-muted-foreground hover:text-foreground"
-                      data-testid="button-back-to-details"
-                    >
-                      ← Back to Course Details
-                    </Button>
-                    <div className="font-mono max-h-[80vh] overflow-y-auto px-2">
-                      <EnrollmentForm 
-                      courseId={course.id} 
-                      courseName={course.name}
-                      onSuccess={() => {
-                        setTimeout(() => onClose(), 2000);
-                      }}/>
-                    </div>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.35 }}
-                    className="flex gap-3 pt-4"
-                  >
+                {/* CTA Buttons */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35 }}
+                  className="flex gap-3 pt-4"
+                >
+                  <Link href={`/courses/${course.id}`} onClick={() => play("click")} className="flex-1">
                     <Button
                       size="lg"
-                      className="flex-1 text-lg font-tech"
+                      className="w-full text-lg font-tech"
                       style={{
-                        background: `linear-gradient(135deg, ${course.neonColor}, ${course.neonColor}dd)`,
-                        color: "#fff",
+                        background: `linear-gradient(135deg, ${course.neonColor}20, ${course.neonColor}10)`,
+                        border: `1px solid ${course.neonColor}40`,
+                        color: course.neonColor,
                       }}
                       onMouseEnter={() => play("hover")}
-                      onClick={() => {
-                        play("click");
-                        setShowEnrollForm(true);
-                      }}
-                      data-testid={`button-enroll-${course.id}`}
                     >
-                      Enroll Now
+                      <span className="text-sm font-bold">View Course Details</span>
+                      <motion.div
+                        className="ml-2"
+                        initial={{ x: 0 }}
+                        whileHover={{ x: 5 }}
+                      >
+                        <ArrowRight className="w-4 h-4" />
+                      </motion.div>
                     </Button>
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="font-tech flex-1 text-lg"
-                      onClick={onClose}
-                      onMouseEnter={() => play("hover")}
-                      data-testid="button-modal-cancel"
-                    >
-                      Close
-                    </Button>
-                  </motion.div>
-                )}
+                  </Link>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="font-tech flex-1 text-lg"
+                    onClick={onClose}
+                    onMouseEnter={() => play("hover")}
+                    data-testid="button-modal-cancel"
+                  >
+                    Close
+                  </Button>
+                </motion.div>
               </div>
             </motion.div>
           </div>
