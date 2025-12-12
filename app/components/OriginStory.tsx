@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { Sparkles, Rocket, Users, Trophy } from "lucide-react";
+import { Sparkles, Rocket, Users, Trophy, Heart } from "lucide-react";
 
 export function OriginStory() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -45,6 +45,27 @@ export function OriginStory() {
 
   return (
     <section id="story" ref={containerRef} className="relative py-20 overflow-hidden">
+      {/* BLACKMONKEY faded background text with subtle red heart - positioned near "The Future" */}
+      <div className="absolute bottom-0 left-5 text-[9rem] sm:text-[10rem] font-tech font-bold text-foreground/[0.08] select-none pointer-events-none translate-x-[-0.5rem] translate-y-[-7rem] leading-[0.8]">
+        <div className="flex items-center gap-3">
+          <span>BLACK</span>
+          <motion.span
+            className="inline-flex items-center justify-center"
+            animate={{
+              scale: [1, 1.05, 1],
+              opacity: [0.2, 0.3, 0.2],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: [0.4, 0, 0.6, 1],
+            }}
+          >
+            <Heart className="w-[8rem] h-[8rem] sm:w-[9rem] sm:h-[9rem] fill-red-500/35 text-red-500/25" style={{ filter: 'drop-shadow(0 0 2px rgba(239, 68, 68, 0.2))' }} />
+          </motion.span>
+        </div>
+        <div>MONKEY</div>
+      </div>
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         <motion.div
@@ -108,9 +129,11 @@ export function OriginStory() {
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="w-full h-full flex items-center justify-center text-8xl opacity-10">
-                    <step.icon className="w-32 h-32" style={{ color: step.color }} />
-                  </div>
+                  {step.title !== "The Future" && (
+                    <div className="w-full h-full flex items-center justify-center text-8xl opacity-10">
+                      <step.icon className="w-32 h-32" style={{ color: step.color }} />
+                    </div>
+                  )}
                 </motion.div>
               </div>
             </motion.div>

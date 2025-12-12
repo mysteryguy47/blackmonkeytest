@@ -58,8 +58,6 @@ export function Hero() {
         </div>
       </div>
 
-
-
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center"
       style={{
         marginTop:50,

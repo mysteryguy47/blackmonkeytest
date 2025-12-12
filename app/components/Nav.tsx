@@ -14,11 +14,40 @@ const Nav = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const pathname = usePathname();
+  const isHomePage = pathname === "/";
 
   // Smart link behavior:
   // If on homepage → scroll to #home
   // If on another page → navigate to "/"
-  const logoLink = pathname === "/" ? "#home" : "/";
+  const logoLink = isHomePage ? "#home" : "/";
+
+  // Helper function to get the correct link path
+  const getNavLink = (item: string) => {
+    // Map "Why Us" to "whyus" (the actual section ID)
+    const sectionMap: Record<string, string> = {
+      'home': 'home',
+      'courses': 'courses',
+      'story': 'story',
+      'why us': 'whyus'
+    };
+    const sectionId = sectionMap[item.toLowerCase()] || item.toLowerCase().replace(' ', '');
+    const hashLink = `#${sectionId}`;
+    // If on home page, use hash link. If on another page, navigate to home page with hash
+    return isHomePage ? hashLink : `/${hashLink}`;
+  };
+
+  // Handle navigation to hash sections when coming from another page
+  useEffect(() => {
+    if (isHomePage && window.location.hash) {
+      const hash = window.location.hash.substring(1);
+      const element = document.getElementById(hash);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    }
+  }, [isHomePage]);
 
   // Hide on scroll down, show on scroll up
   useEffect(() => {
@@ -66,7 +95,7 @@ const Nav = () => {
         <ul className="bm-navlist font-tech">
           {['Home', 'Courses', 'Story', 'Why Us'].map((item) => (
             <li key={item} className="bm-navitem">
-              <a href={`#${item.toLowerCase().replace(' ', '')}`}>{item}</a>
+              <Link href={getNavLink(item)}>{item}</Link>
               <span className="bm-underline"></span>
             </li>
           ))}
@@ -89,14 +118,14 @@ const Nav = () => {
         transition={{ duration: 0.3 }}
       >
         {['Home', 'Courses', 'Story', 'Why Us'].map((item) => (
-          <a
+          <Link
             key={item}
-            href={`#${item.toLowerCase().replace(' ', '')}`}
+            href={getNavLink(item)}
             className="bm-mobile-link"
             onClick={() => setMobileOpen(false)}
           >
             {item}
-          </a>
+          </Link>
         ))}
       </motion.div>
     </>

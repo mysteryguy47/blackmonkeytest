@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { coursesData } from "@shared/schema";
-import { CustomCursor } from "@/components/CustomCursor";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -19,7 +18,6 @@ import {
   BookOpen,
 } from "lucide-react";
 import DarkVeil from "@/components/DarkVeil";
-import { AnimatedNavbar } from "@/components/AnimatedNavbar";
 
 export default function ShunyaPage() {
   const course = coursesData.find((c) => c.id === "shunya");
@@ -43,8 +41,6 @@ export default function ShunyaPage() {
 
   return (
     <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
-      <CustomCursor />
-      <AnimatedNavbar />
       <div
         className="glass-container"
         style={{ width: "100vw", height: "100vh", position: "absolute" }}
@@ -283,4 +279,6 @@ export default function ShunyaPage() {
     </div>
   );
 }
+
+
 

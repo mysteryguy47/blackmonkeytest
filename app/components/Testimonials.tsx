@@ -5,7 +5,7 @@ import { Star } from "lucide-react";
 
 export function Testimonials() {
   return (
-    <section className="relative py-20 overflow-hidden">
+    <section id="testimonials" className="relative py-20 overflow-hidden">
 
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">

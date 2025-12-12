@@ -236,11 +236,16 @@
 
   @media (min-width: 768px) {
     body {
-      cursor: none;
+      cursor: none !important;
     }
 
     body * {
-      cursor: none;
+      cursor: none !important;
+    }
+    
+    /* Ensure no crosshair or other cursor types appear */
+    * {
+      cursor: none !important;
     }
   }
 }

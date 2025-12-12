@@ -44,14 +44,13 @@ export function Manifesto() {
           </div>
 
 
+          {/* NEXT GEN on the right */}
           <div className="absolute bottom-1/4 right-0 text-[12rem] font-tech font-bold text-foreground/[0.08] select-none pointer-events-none translate-y-[-2rem]">
         NEXT
       </div>
       <div className="absolute bottom-1/4 right-12 text-[13rem] font-tech font-bold text-foreground/[0.08] select-none pointer-events-none translate-y-[9rem]">
         GEN
       </div>
-
-
 
           {/* Manifesto Text */}
           <div className="space-y-8" data-testid="text-manifesto">

@@ -10,7 +10,7 @@ interface CoursesSectionProps {
 export function CoursesSection({ onCourseSelect }: CoursesSectionProps) {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   return (
-    <section id="courses" className="relative py-20 overflow-hidden">
+    <section id="courses" className="relative py-20 pb-32 overflow-hidden">
 
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">

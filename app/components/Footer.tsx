@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Heart, Mail, MapPin, Phone, Facebook, Twitter, Instagram, Linkedin, Youtube } from "lucide-react";
+import { Heart, Mail, MapPin, Phone, Instagram, Linkedin, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Button1 } from "@/components/ui/button1";
 import { Input } from "@/components/ui/input";
@@ -24,7 +24,7 @@ export function Footer() {
     ],
     company: [
       { label: "About Us", path: "/#story" },
-      { label: "Why Choose Us", path: "/#why-us" },
+      { label: "Why Choose Us", path: "/#whyus" },
       { label: "The Lab", path: "/#lab" },
       { label: "Testimonials", path: "/#testimonials" },
     ],
@@ -37,8 +37,6 @@ export function Footer() {
   };
 
   const socialLinks = [
-    { icon: Facebook, href: "#", label: "Facebook", color: "rgb(59, 89, 152)" },
-    { icon: Twitter, href: "#", label: "Twitter", color: "rgb(29, 161, 242)" },
     { icon: Instagram, href: "#", label: "Instagram", color: "rgb(225, 48, 108)" },
     { icon: Linkedin, href: "#", label: "LinkedIn", color: "rgb(40, 103, 178)" },
     { icon: Youtube, href: "#", label: "YouTube", color: "rgb(255, 0, 0)" },
@@ -69,8 +67,8 @@ export function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+          <div className="flex flex-col w-full min-w-0">
             <h3 className="font-display text-2xl font-bold mb-6">
               <span className="font-tech bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent">
                 Black
@@ -97,7 +95,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div>
+          <div className="flex flex-col w-full min-w-0">
             <h4 className="font-tech font-semibold text-foreground mb-6">Courses</h4>
             <ul className="font-mono space-y-3">
               {footerLinks.courses.map((link) => (
@@ -112,7 +110,7 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
+          <div className="flex flex-col w-full min-w-0">
             <h4 className="font-tech font-semibold text-foreground mb-6">Company</h4>
             <ul className="font-mono space-y-3">
               {footerLinks.company.map((link) => (
@@ -127,33 +125,33 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
+          <div className="flex flex-col w-full min-w-0">
             <h4 className="font-tech font-semibold text-foreground mb-6">Legal</h4>
             <ul className="font-mono space-y-3">
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-neon-purple transition-colors" data-testid="link-footer-privacy">
+                <Link href="/privacy-policy" className="text-sm text-muted-foreground hover:text-neon-purple transition-colors" data-testid="link-footer-privacy">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-neon-purple transition-colors" data-testid="link-footer-terms">
+                <Link href="/terms-of-service" className="text-sm text-muted-foreground hover:text-neon-purple transition-colors" data-testid="link-footer-terms">
                   Terms of Service
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-neon-purple transition-colors" data-testid="link-footer-refunds">
+                <Link href="/refunds-cancellations" className="text-sm text-muted-foreground hover:text-neon-purple transition-colors" data-testid="link-footer-refunds">
                   Refunds &amp; Cancellations
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-neon-purple transition-colors" data-testid="link-footer-cookies">
+                <Link href="/cookies" className="text-sm text-muted-foreground hover:text-neon-purple transition-colors" data-testid="link-footer-cookies">
                   Cookies
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
 
-          <div>
+          <div className="flex flex-col w-full min-w-0">
             <h4 className="font-tech font-semibold text-foreground mb-6">Stay Updated</h4>
             <p className="font-mono text-sm text-muted-foreground mb-4">
               Subscribe to our newsletter for the latest updates and exclusive content.

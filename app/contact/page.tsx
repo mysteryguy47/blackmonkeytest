@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { CustomCursor } from "@/components/CustomCursor";
 import { AnimatedNavbar } from "@/components/AnimatedNavbar";
 import { Footer } from "@/components/Footer";
 import { Input } from "@/components/ui/input";
@@ -53,7 +52,6 @@ export default function ContactPage() {
 
   return (
     <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
-      <CustomCursor />
       <AnimatedNavbar />
       <div
         className="glass-container"
