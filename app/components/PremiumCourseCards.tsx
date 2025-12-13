@@ -212,6 +212,8 @@ function PremiumCourseCard({ course, index, onSelect, isActive = false }: Premiu
                   src={courseImageMap[course.id]}
                   alt={`${course.name} Product Kit`}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  quality={95}
                   className="object-cover"
                   style={{
                     filter: isHovered 
@@ -219,8 +221,7 @@ function PremiumCourseCard({ course, index, onSelect, isActive = false }: Premiu
                       : `brightness(1.0) saturate(1.05)`,
                     transition: "filter 0.6s ease",
                   }}
-                  priority
-                  unoptimized
+                  priority={isActive}
                 />
               </div>
 

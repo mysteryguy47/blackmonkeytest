@@ -3,6 +3,11 @@ export {};
 
 declare global {
   interface Window {
-    Cashfree: any;  // or more specific type if you know
+    Cashfree: (config: { mode: "production" | "sandbox" }) => {
+      checkout: (options: {
+        paymentSessionId: string;
+        redirectTarget?: "_self" | "_blank";
+      }) => void;
+    };
   }
 }

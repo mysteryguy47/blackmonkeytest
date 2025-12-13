@@ -453,9 +453,10 @@ export default function CoursePage({ params }: any) {
                         src={courseImageMap[course.id]}
                         alt={`${course.name} Product Kit`}
                         fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                        quality={100}
                         className="object-contain"
                         priority
-                        unoptimized
                       />
                     </div>
                     {/* Glow effect */}

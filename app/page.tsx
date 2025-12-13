@@ -17,7 +17,6 @@ import { Manifesto } from "@/components/Manifesto";
 import DarkVeil from "@/components/DarkVeil";
 import Nav from "@/components/Nav";
 import ScrollRestoration from "./scroll-restoration";
-import CheckoutButton from "@/components/CheckoutButton";
 
 export default function HomePage() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -68,7 +67,6 @@ export default function HomePage() {
         <main className="relative z-10">
           <Hero />
           <Manifesto />
-          <CheckoutButton />
           <STEMCards />
           <CoursesSection onCourseSelect={handleCourseSelect} />
           <OriginStory />

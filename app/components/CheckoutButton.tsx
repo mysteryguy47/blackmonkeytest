@@ -2,43 +2,52 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { PaymentForm, getCoursePrice } from "./PaymentForm";
+import { Course } from "@shared/schema";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { X } from "lucide-react";
 
-export default function CheckoutButton() {
-  const [loading, setLoading] = useState(false);
+interface CheckoutButtonProps {
+  course?: Course;
+  className?: string;
+}
 
-  const handlePay = async () => {
-    setLoading(true);
-    const resp = await fetch("/api/create-order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        order_amount: 11,  // your amount
-        customer_name: "John Doe",
-        customer_email: "john@example.com",
-        customer_phone: "9999999999",
-      }),
-    });
-    const data = await resp.json();
-    console.log("API Response:", data);
+export default function CheckoutButton({ course, className }: CheckoutButtonProps) {
+  const [isOpen, setIsOpen] = useState(false);
 
-    setLoading(false);
+  // If no course provided, this is a demo/test button - should be removed or hidden in production
+  if (!course) {
+    return null; // Hide button if no course selected
+  }
 
-    if (data.paymentSessionId) {
-      const script = document.createElement("script");
-      script.src = "https://sdk.cashfree.com/js/v3/cashfree.js";
-      script.onload = () => {
-        const cashfree = window.Cashfree({ mode: "production" });
-        cashfree.checkout({ paymentSessionId: data.paymentSessionId, redirectTarget: "_self" });
-      };
-      document.body.appendChild(script);
-    } else {
-      alert("Payment initialization failed");
-    }
-  };
+  const orderAmount = getCoursePrice(course.id);
 
   return (
-    <button onClick={handlePay} disabled={loading}>
-      {loading ? "Please wait..." : "Pay Now"}
-    </button>
+    <>
+      <Button
+        onClick={() => setIsOpen(true)}
+        className={className}
+        style={{
+          background: `linear-gradient(135deg, ${course.neonColor}, ${course.neonColor}dd)`,
+        }}
+      >
+        Enroll Now - ₹{orderAmount.toLocaleString("en-IN")}
+      </Button>
+
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Complete Your Enrollment</DialogTitle>
+          </DialogHeader>
+          <PaymentForm
+            course={course}
+            orderAmount={orderAmount}
+            onSuccess={() => setIsOpen(false)}
+            onCancel={() => setIsOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

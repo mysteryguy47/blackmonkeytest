@@ -1104,6 +1104,9 @@ video {
 .mt-auto {
   margin-top: auto;
 }
+.mt-8 {
+  margin-top: 2rem;
+}
 .block {
   display: block;
 }
@@ -1684,6 +1687,15 @@ video {
 .animate-star-movement-top {
   animation: star-movement-top linear infinite alternate;
 }
+@keyframes spin {
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
 .cursor-default {
   cursor: default;
 }
@@ -2070,6 +2082,12 @@ video {
 .border-white\/30 {
   border-color: rgb(255 255 255 / 0.3);
 }
+.border-destructive\/20 {
+  border-color: hsl(var(--destructive) / 0.2);
+}
+.border-yellow-500\/50 {
+  border-color: rgb(234 179 8 / 0.5);
+}
 .border-l-transparent {
   border-left-color: transparent;
 }
@@ -2234,6 +2252,15 @@ video {
 }
 .bg-yellow-500\/10 {
   background-color: rgb(234 179 8 / 0.1);
+}
+.bg-destructive\/10 {
+  background-color: hsl(var(--destructive) / 0.1);
+}
+.bg-destructive\/20 {
+  background-color: hsl(var(--destructive) / 0.2);
+}
+.bg-yellow-500\/20 {
+  background-color: rgb(234 179 8 / 0.2);
 }
 .\!bg-gradient-to-br {
   background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)) !important;
@@ -2996,6 +3023,10 @@ video {
 .text-yellow-400 {
   --tw-text-opacity: 1;
   color: rgb(250 204 21 / var(--tw-text-opacity, 1));
+}
+.text-yellow-500 {
+  --tw-text-opacity: 1;
+  color: rgb(234 179 8 / var(--tw-text-opacity, 1));
 }
 .placeholder-muted-foreground::-moz-placeholder {
   --tw-placeholder-opacity: 1;
@@ -5352,6 +5383,10 @@ nav, .navbar, #nav, .bm-nav {
 
   .md\:flex-row-reverse {
     flex-direction: row-reverse;
+  }
+
+  .md\:p-12 {
+    padding: 3rem;
   }
 
   .md\:text-2xl {

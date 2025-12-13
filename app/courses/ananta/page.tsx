@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { coursesData } from "@shared/schema";
 import { Footer } from "@/components/Footer";
@@ -291,18 +292,19 @@ export default function AnantaPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8 }}
                 >
-                  <Button
-                    size="lg"
-                    className="text-lg px-8 py-7 rounded-xl font-semibold hover:scale-105 transition-transform duration-300"
-                    style={{
-                      background: `linear-gradient(135deg, ${course.neonColor}, ${course.neonColor}dd)`,
-                      boxShadow: `0 8px 32px -8px ${course.neonColor}50`,
-                    }}
-                    onClick={() => play("click")}
-                  >
-                    <Rocket className="w-5 h-5 mr-2" />
-                    Enroll Now
-                  </Button>
+                  <Link href={`/payment/${course.id}`} onClick={() => play("click")}>
+                    <Button
+                      size="lg"
+                      className="text-lg px-8 py-7 rounded-xl font-semibold hover:scale-105 transition-transform duration-300"
+                      style={{
+                        background: `linear-gradient(135deg, ${course.neonColor}, ${course.neonColor}dd)`,
+                        boxShadow: `0 8px 32px -8px ${course.neonColor}50`,
+                      }}
+                    >
+                      <Rocket className="w-5 h-5 mr-2" />
+                      Enroll Now
+                    </Button>
+                  </Link>
                   <Button
                     size="lg"
                     variant="outline"
@@ -336,9 +338,10 @@ export default function AnantaPage() {
                         src={courseImageMap[course.id]}
                         alt={`${course.name} Product Kit`}
                         fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                        quality={100}
                         className="object-contain"
                         priority
-                        unoptimized
                       />
                     </div>
                     {/* Glow effect */}
@@ -838,18 +841,19 @@ export default function AnantaPage() {
                     Join hundreds of young creators building the future. Enroll now and get your premium kit delivered to your door.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button
-                      size="lg"
-                      className="text-lg px-10 py-7 rounded-xl font-semibold hover:scale-105 transition-transform duration-300"
-                      style={{
-                        background: `linear-gradient(135deg, ${course.neonColor}, ${course.neonColor}dd)`,
-                        boxShadow: `0 8px 32px -8px ${course.neonColor}50`,
-                      }}
-                      onClick={() => play("click")}
-                    >
-                      <GraduationCap className="w-5 h-5 mr-2" />
-                      Enroll in {course.name}
-                    </Button>
+                    <Link href={`/payment/${course.id}`} onClick={() => play("click")}>
+                      <Button
+                        size="lg"
+                        className="text-lg px-10 py-7 rounded-xl font-semibold hover:scale-105 transition-transform duration-300"
+                        style={{
+                          background: `linear-gradient(135deg, ${course.neonColor}, ${course.neonColor}dd)`,
+                          boxShadow: `0 8px 32px -8px ${course.neonColor}50`,
+                        }}
+                      >
+                        <GraduationCap className="w-5 h-5 mr-2" />
+                        Enroll in {course.name}
+                      </Button>
+                    </Link>
                     <Button
                       size="lg"
                       variant="outline"

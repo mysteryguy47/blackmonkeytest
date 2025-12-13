@@ -407,22 +407,36 @@ export function AdvancedModal({ course, isOpen, onClose }: AdvancedModalProps) {
                   </div>
                 </motion.div>
 
-                {/* Premium CTA Button */}
+                {/* Premium CTA Buttons */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
+                  className="flex flex-col sm:flex-row gap-4"
                 >
                   <Link href={`/courses/${course.id}`} onClick={() => play("click")}>
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="w-full sm:w-auto text-lg px-10 py-7 font-mono rounded-xl hover:scale-[1.02] transition-transform duration-300 border-2"
+                      style={{
+                        borderColor: `${course.neonColor}40`,
+                      }}
+                    >
+                      Explore Full Course
+                      <ArrowRight className="w-5 h-5 ml-2" />
+                    </Button>
+                  </Link>
+                  <Link href={`/payment/${course.id}`} onClick={() => play("click")}>
                     <Button
                       size="lg"
                       className="w-full sm:w-auto text-lg px-10 py-7 font-mono rounded-xl hover:scale-[1.02] transition-transform duration-300"
                       style={{
                         background: `linear-gradient(135deg, ${course.neonColor}, ${course.neonColor}dd)`,
-                        boxShadow: `0 8px 32px -8px ${course.neonColor}40, 0 0 0 1px ${course.neonColor}30`,
+                        boxShadow: `0 8px 32px -8px ${course.neonColor}40`,
                       }}
                     >
-                      Explore Full Course
+                      Enroll Now
                       <ArrowRight className="w-5 h-5 ml-2" />
                     </Button>
                   </Link>
