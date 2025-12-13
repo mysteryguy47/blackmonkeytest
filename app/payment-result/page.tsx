@@ -21,6 +21,13 @@ function PaymentResultContent() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    if (!searchParams) {
+      setStatus("failed");
+      setError("Unable to read payment response.");
+      return;
+    }
+    
     const orderIdParam = searchParams.get("order_id");
     
     if (!orderIdParam) {
