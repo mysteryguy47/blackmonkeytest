@@ -58,29 +58,56 @@
     color: #eaeaea;
     font-size: 1rem;
     letter-spacing: 0.5px;
-    transition: 0.25s ease;
+    transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+    position: relative;
   }
   
   .bm-navitem:hover a {
-    color: #ffdd53;
-    text-shadow: 0 0 12px rgba(255, 216, 83, 0.9);
+    color: #ffffff;
+    text-shadow: 
+      0 0 10px rgba(255, 215, 0, 0.6),
+      0 0 20px rgba(255, 215, 0, 0.4),
+      0 0 30px rgba(255, 215, 0, 0.2),
+      0 2px 4px rgba(255, 215, 0, 0.3);
+    transform: translateY(-1px);
   }
   
-  /* Neon underline animation */
+  /* Premium gold/amber gradient underline with shimmer */
   .bm-underline {
     position: absolute;
     bottom: -6px;
     left: 50%;
     width: 0%;
-    height: 2px;
-    background: #ffdd53;
+    height: 2.5px;
+    background: linear-gradient(90deg, 
+      rgba(255, 215, 0, 0.8) 0%,
+      rgba(255, 193, 7, 1) 25%,
+      rgba(255, 215, 0, 1) 50%,
+      rgba(255, 193, 7, 1) 75%,
+      rgba(255, 215, 0, 0.8) 100%
+    );
+    background-size: 200% 100%;
     border-radius: 30px;
-    transition: 0.3s ease;
+    transition: width 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
     transform: translateX(-50%);
+    box-shadow: 
+      0 0 15px rgba(255, 215, 0, 0.8),
+      0 0 30px rgba(255, 193, 7, 0.6),
+      0 0 45px rgba(255, 215, 0, 0.4);
   }
   
   .bm-navitem:hover .bm-underline {
-    width: 70%;
+    width: 85%;
+    animation: shimmer 2.5s ease-in-out infinite;
+  }
+  
+  @keyframes shimmer {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
   }
   
   /* ------------------------------
@@ -124,8 +151,12 @@
   }
   
   .bm-mobile-link:hover {
-    background: rgba(255, 221, 83, 0.15);
-    color: #ffdd53;
+    background: rgba(255, 215, 0, 0.12);
+    color: #ffd700;
+    text-shadow: 
+      0 0 10px rgba(255, 215, 0, 0.6),
+      0 0 20px rgba(255, 193, 7, 0.4);
+    border-left: 3px solid rgba(255, 215, 0, 0.8);
   }
   
   /* ------------------------------

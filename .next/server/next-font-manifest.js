@@ -1,1 +1,0 @@
-self.__NEXT_FONT_MANIFEST='{"pages":{},"app":{"/Volumes/Waheguru/Waheguru Home/Desktop/Final/app/layout":["static/media/ab86f138d0d6e9da-s.p.woff2"]},"appUsingSizeAdjust":true,"pagesUsingSizeAdjust":false}';

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import './Nav.css';
 import Image from "next/image";
@@ -12,8 +12,10 @@ const Nav = () => {
   const [show, setShow] = useState(true);
   const [lastScroll, setLastScroll] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [pendingHash, setPendingHash] = useState<string | null>(null);
 
   const pathname = usePathname();
+  const router = useRouter();
   const isHomePage = pathname === "/";
 
   // Smart link behavior:
@@ -36,18 +38,60 @@ const Nav = () => {
     return isHomePage ? hashLink : `/${hashLink}`;
   };
 
+  // Handle navigation click from other pages to home page sections
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: string) => {
+    if (!isHomePage) {
+      e.preventDefault();
+      const sectionMap: Record<string, string> = {
+        'home': 'home',
+        'courses': 'courses',
+        'story': 'story',
+        'why us': 'whyus'
+      };
+      const sectionId = sectionMap[item.toLowerCase()] || item.toLowerCase().replace(' ', '');
+      
+      // Store the hash we want to scroll to
+      setPendingHash(sectionId);
+      
+      // Navigate to home page with hash
+      router.push(`/#${sectionId}`);
+    }
+  };
+
   // Handle navigation to hash sections when coming from another page
+  // Only scroll to hash if it's a navigation (not a page refresh)
   useEffect(() => {
-    if (isHomePage && window.location.hash) {
-      const hash = window.location.hash.substring(1);
-      const element = document.getElementById(hash);
-      if (element) {
-        setTimeout(() => {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 100);
+    if (isHomePage) {
+      // If we have a pending hash (from navigation from another page), use it
+      const hashToScroll = pendingHash || window.location.hash.substring(1);
+      
+      if (hashToScroll) {
+        // Check if this is a page refresh by checking if we're at the top and no referrer
+        const isPageRefresh = window.scrollY === 0 && document.referrer === "" && !pendingHash;
+        
+        // Only scroll to hash if it's NOT a page refresh
+        if (!isPageRefresh) {
+          const scrollToSection = () => {
+            const element = document.getElementById(hashToScroll);
+            if (element) {
+              element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              setPendingHash(null); // Clear pending hash after scrolling
+            } else {
+              // If element not found yet, try again after a short delay
+              setTimeout(scrollToSection, 50);
+            }
+          };
+          
+          // Wait a bit for the page to render
+          setTimeout(scrollToSection, 100);
+        } else {
+          // On refresh, clear the hash
+          window.history.replaceState(null, "", window.location.pathname);
+          setPendingHash(null);
+        }
       }
     }
-  }, [isHomePage]);
+  }, [isHomePage, pendingHash]);
 
   // Hide on scroll down, show on scroll up
   useEffect(() => {
@@ -95,7 +139,7 @@ const Nav = () => {
         <ul className="bm-navlist font-tech">
           {['Home', 'Courses', 'Story', 'Why Us'].map((item) => (
             <li key={item} className="bm-navitem">
-              <Link href={getNavLink(item)}>{item}</Link>
+              <Link href={getNavLink(item)} onClick={(e) => handleNavClick(e, item)}>{item}</Link>
               <span className="bm-underline"></span>
             </li>
           ))}
@@ -122,7 +166,10 @@ const Nav = () => {
             key={item}
             href={getNavLink(item)}
             className="bm-mobile-link"
-            onClick={() => setMobileOpen(false)}
+            onClick={(e) => {
+              handleNavClick(e, item);
+              setMobileOpen(false);
+            }}
           >
             {item}
           </Link>

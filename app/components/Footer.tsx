@@ -37,13 +37,13 @@ export function Footer() {
   };
 
   const socialLinks = [
-    { icon: Instagram, href: "#", label: "Instagram", color: "rgb(225, 48, 108)" },
-    { icon: Linkedin, href: "#", label: "LinkedIn", color: "rgb(40, 103, 178)" },
+    { icon: Instagram, href: "https://www.instagram.com/blackmonkey.ai/?utm_source=ig_web_button_share_sheet", label: "Instagram", color: "rgb(225, 48, 108)" },
+    { icon: Linkedin, href: "https://www.linkedin.com/company/blackmonkeyx/", label: "LinkedIn", color: "rgb(40, 103, 178)" },
     { icon: Youtube, href: "#", label: "YouTube", color: "rgb(255, 0, 0)" },
   ];
 
   return (
-    <footer className="relative bg-card/30 border-t border-border backdrop-blur-sm overflow-hidden">
+    <footer className="relative bg-card/30 border-t border-border backdrop-blur-sm overflow-visible">
       <div className="absolute inset-0 opacity-30">
         {[...Array(20)].map((_, i) => (
           <motion.div
@@ -156,16 +156,6 @@ export function Footer() {
             <p className="font-mono text-sm text-muted-foreground mb-4">
               Subscribe to our newsletter for the latest updates and exclusive content.
             </p>
-            {/* Scroll To Top Button */}
-<Button1
-  onClick={scrollToTop}
-  size="icon"
-  variant="outline"
-  className="fixed bottom-40 right-0 z-50 rounded-full shadow-[0_0_20px_5px_rgba(0,255,255,0.7) glass-card neon-glow-cyan shadow-lg backdrop-blur-md"
-  data-testid="button-scroll-top"
->
-  <ArrowUp className="h-5 w-5" />
-</Button1>
             <div className="font-mono flex gap-2 mb-6">
               <Input
                 type="email"
@@ -182,6 +172,8 @@ export function Footer() {
                 <motion.a
                   key={social.label}
                   href={social.href}
+                  target={social.href !== "#" ? "_blank" : undefined}
+                  rel={social.href !== "#" ? "noopener noreferrer" : undefined}
                   className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground transition-all duration-300"
                   style={{
                     boxShadow: `0 0 8px ${social.color}40, inset 0 0 4px ${social.color}20`,
@@ -209,7 +201,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="pt-8 border-t border-border">
+        <div className="pt-8 border-t border-border relative">
           <div className="font-mono text-xs text-muted-foreground flex items-center justify-between w-full gap-20">
                <p>© 2025 BlackMonkey™. All rights reserved.</p>
                         <p className="font-mono text-xs text-muted-foreground flex items-center gap-2">
@@ -221,7 +213,18 @@ export function Footer() {
         </div>
       </div>
 
-
+      {/* Scroll To Top Button - Positioned just above Stay Updated section */}
+      <div className="absolute top-16 right-48">
+        <Button1
+          onClick={scrollToTop}
+          size="icon"
+          variant="outline"
+          className="rounded-full shadow-[0_0_20px_5px_rgba(0,255,255,0.7)] glass-card neon-glow-cyan backdrop-blur-md"
+          data-testid="button-scroll-top"
+        >
+          <ArrowUp className="h-5 w-5" />
+        </Button1>
+      </div>
     </footer>
   );
 }

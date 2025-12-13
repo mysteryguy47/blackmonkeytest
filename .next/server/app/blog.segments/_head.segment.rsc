@@ -1,8 +1,0 @@
-1:"$Sreact.fragment"
-2:I[90484,[],"ViewportBoundary"]
-4:I[90484,[],"MetadataBoundary"]
-5:"$Sreact.suspense"
-7:I[86869,[],"IconMark"]
-0:{"buildId":"gKhGwV-fIk7oPUaCgEgpF","rsc":["$","$1","h",{"children":[null,["$","$L2",null,{"children":"$@3"}],["$","div",null,{"hidden":true,"children":["$","$L4",null,{"children":["$","$5",null,{"name":"Next.Metadata","children":"$@6"}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"loading":null,"isPartial":false}
-3:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
-6:[["$","title","0",{"children":"BlackMonkey - Next-Gen STEM Education for Kids"}],["$","meta","1",{"name":"description","content":"BlackMonkey offers interactive STEM courses in paper circuits, robotics, IoT, and drones. Gamified learning experiences that make science, technology, engineering, and math exciting for kids."}],["$","meta","2",{"property":"og:title","content":"BlackMonkey - Next-Gen STEM Education"}],["$","meta","3",{"property":"og:description","content":"Interactive STEM courses for kids: Paper Circuits, Robotics, IoT, and Drones"}],["$","meta","4",{"property":"og:type","content":"website"}],["$","meta","5",{"name":"twitter:card","content":"summary"}],["$","meta","6",{"name":"twitter:title","content":"BlackMonkey - Next-Gen STEM Education"}],["$","meta","7",{"name":"twitter:description","content":"Interactive STEM courses for kids: Paper Circuits, Robotics, IoT, and Drones"}],["$","link","8",{"rel":"shortcut icon","href":"/favicon.ico"}],["$","link","9",{"rel":"icon","href":"/favicon.ico"}],["$","link","10",{"rel":"apple-touch-icon","href":"/favicon.png"}],["$","$L7","11",{}]]

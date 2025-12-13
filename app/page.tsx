@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CustomCursor } from "@/components/CustomCursor";
 import { ParticleBackground } from "@/components/ParticleBackground";
 import { Hero } from "@/components/Hero";
@@ -22,6 +22,27 @@ import CheckoutButton from "@/components/CheckoutButton";
 export default function HomePage() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Ensure page scrolls to top on mount/refresh
+  useEffect(() => {
+    // Clear any hash from URL
+    if (window.location.hash) {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+    
+    // Force scroll to top immediately
+    window.scrollTo(0, 0);
+    
+    // Also scroll after render to ensure it works
+    const timeoutId = setTimeout(() => {
+      window.scrollTo(0, 0);
+      requestAnimationFrame(() => {
+        window.scrollTo(0, 0);
+      });
+    }, 0);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   const handleCourseSelect = (course: Course) => {
     setSelectedCourse(course);

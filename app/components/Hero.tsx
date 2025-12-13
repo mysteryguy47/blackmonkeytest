@@ -8,6 +8,7 @@ import { ArrowUp } from "lucide-react";
 import { useRef, useState, useEffect } from 'react';
 import VariableProximity from './VariableProximity';
 import Link from "next/link";
+import StarBorder from "@/components/StarBorder";
 
 export function Hero() {
   const { play } = useSound();
@@ -33,7 +34,7 @@ export function Hero() {
   }, []);
 
   return (
-    <section className="font-tech relative min-h-screen flex items-center justify-center overflow-hidden pt-20 font-mono" id="home">
+    <section className="font-tech relative min-h-screen flex items-center justify-center overflow-x-hidden overflow-y-visible pt-20 font-mono" id="home">
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 opacity-30">
           {particles.map((particle, i) => (
@@ -58,9 +59,11 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center"
+      <div className="relative z-10 max-w-6xl mx-auto px-6 text-center overflow-x-visible overflow-y-visible"
       style={{
         marginTop:50,
+        paddingLeft: '1.5rem',
+        paddingRight: '1.5rem',
       }}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -73,19 +76,26 @@ export function Hero() {
         </motion.div>
 
         <motion.h1
-          className="font-display font-extrabold mb-6 leading-tight px-4"
+          className="font-display font-extrabold mb-6 leading-tight bg-clip-text text-transparent"
           style={{
             fontSize: 'clamp(2rem, 8vw, 6rem)',
+            backgroundImage: 'linear-gradient(to bottom right, rgb(168, 85, 247) 0%, rgb(200, 100, 245) 12%, rgb(236, 72, 153) 28%, rgb(200, 120, 240) 45%, rgb(34, 211, 238) 58%, rgb(180, 200, 250) 70%, rgb(240, 245, 255) 78%, rgb(255, 255, 255) 78%, rgb(255, 255, 255) 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            paddingLeft: '1rem',
+            paddingRight: '1rem',
+            overflow: 'visible',
           }}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           data-testid="text-hero-title"
         >
-          <span className="font-tech bg-gradient-to-r from-neon-purple via-neon-pink to-neon-cyan bg-clip-text text-transparent block">
+          <span className="font-satoshi font-light block">
             Ignite Curiosity.
           </span>
-          <span className="font-tech text-foreground block whitespace-nowrap">Build Their Future.</span>
+          <span className="font-tech block whitespace-nowrap" style={{ overflow: 'visible', width: 'fit-content', margin: '0 auto', display: 'block' }}>Build Their Future.</span>
         </motion.h1>
 
         <motion.div
@@ -120,26 +130,30 @@ export function Hero() {
         >
           <Button
             size="lg"
-            className="text-lg px-8 py-6 bg-gradient-to-r from-neon-purple to-neon-pink hover:from-neon-pink hover:to-neon-cyan transition-all duration-300 shadow-lg shadow-neon-purple/50 hover:shadow-neon-cyan/50"
+            className="text-lg font-semibold px-6 !h-14 !min-h-14 rounded-xl bg-gradient-to-r from-neon-purple to-neon-pink hover:from-neon-pink hover:to-neon-cyan transition-all duration-300 shadow-md shadow-neon-purple/20 hover:shadow-lg hover:shadow-neon-cyan/30 hover:scale-[1.02] active:scale-[0.98] border-0 !text-white"
             data-testid="button-explore-courses"
             onClick={scrollToCourses}
             onMouseEnter={() => play("hover")}
           >
-            <Zap className="w-5 h-5 mr-2" />
-            Explore Courses
+            <Zap className="w-5 h-5" />
+            <span>Explore Courses</span>
           </Button>
 
-          <Link href="/bmlab" target="_blank" rel="noopener noreferrer">
-          <Button
-            size="lg"
-            variant="outline"
-            className="text-lg px-8 py-6 border-2 hover:border-neon-purple hover:text-white transition-all duration-300 shadow-lg shadow-neon-purple/50 hover:shadow-neon-purple/50"
-            data-testid="button-watch-demo"
+          <StarBorder 
+            as="a" 
+            href="/bmlab" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            color="#c59915" 
+            speed="5s" 
+            thickness={2}
+            className="cursor-pointer inline-flex items-center group transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]" 
+            contentClassName="text-lg font-semibold px-6 !h-14 !bg-gradient-to-br !from-slate-900/95 !to-slate-800/95 !text-white !border-0 hover:!text-white transition-all duration-300 !shadow-none !flex !items-center !justify-center !gap-2.5 backdrop-blur-md rounded-xl"
             onMouseEnter={() => play("hover")}
           >
-            BlackMonkey Lab<ArrowRightIcon className="h-5 w-5" />
-          </Button>
-          </Link>
+            <span className="whitespace-nowrap">BlackMonkey Lab</span>
+            <ArrowRightIcon className="h-5 w-5 transition-all duration-300 group-hover:translate-x-1.5 group-hover:scale-110" />
+          </StarBorder>
         </motion.div>
 
         <motion.div

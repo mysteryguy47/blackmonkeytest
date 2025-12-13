@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
 import { coursesData, type Course } from "@shared/schema";
 import { EnhancedCourseCard } from "./EnhancedCourseCard";
+import { PremiumCourseCards } from "./PremiumCourseCards";
 import { useState } from "react";
+import StarBorder from "@/components/StarBorder";
 
 interface CoursesSectionProps {
   onCourseSelect?: (course: Course) => void;
@@ -32,8 +34,20 @@ export function CoursesSection({ onCourseSelect }: CoursesSectionProps) {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {coursesData.map((course, index) => (
+        {/* Premium Course Cards Slider */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mb-16"
+        >
+          <PremiumCourseCards />
+        </motion.div>
+
+        {/* Existing Course Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
+          {coursesData.slice(0, 3).map((course, index) => (
             <EnhancedCourseCard
               key={course.id}
               course={course}
@@ -41,6 +55,18 @@ export function CoursesSection({ onCourseSelect }: CoursesSectionProps) {
               onSelect={onCourseSelect}
             />
           ))}
+          {/* Last 2 cards centered */}
+          <div className="lg:col-span-3 flex flex-col md:flex-row lg:justify-center gap-8">
+            {coursesData.slice(3).map((course, index) => (
+              <div key={course.id} className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.33rem)]">
+                <EnhancedCourseCard
+                  course={course}
+                  index={index + 3}
+                  onSelect={onCourseSelect}
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* More Courses Info */}
@@ -64,14 +90,21 @@ export function CoursesSection({ onCourseSelect }: CoursesSectionProps) {
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ delay: idx * 0.1 }}
-                className="text-center p-4 rounded-lg bg-slate-800/30 border border-slate-700/30"
               >
-                <div className="font-mono text-sm font-bold text-muted-foreground mb-2">
-                  Level {idx + 1}
-                </div>
-                <div className="font-display font-bold text-foreground font-tech">
-                  {course.name}
-                </div>
+                <StarBorder
+                  color={course.neonColor}
+                  speed="5s"
+                  thickness={2}
+                  className="w-full"
+                  contentClassName="text-center p-4 !bg-slate-800/30 !border-slate-700/30 !text-foreground rounded-lg !flex !flex-col !items-center !justify-center !gap-2"
+                >
+                  <div className="font-mono text-sm font-bold text-muted-foreground">
+                    Level {idx + 1}
+                  </div>
+                  <div className="font-display font-bold font-tech">
+                    {course.name}
+                  </div>
+                </StarBorder>
               </motion.div>
             ))}
           </div>

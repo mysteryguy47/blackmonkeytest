@@ -12,6 +12,11 @@ const nextConfig = {
       '@': path.resolve(__dirname, 'app'),
       '@shared': path.resolve(__dirname, 'shared'),
     };
+    // Include .glb files as assets
+    config.module.rules.push({
+      test: /\.glb$/,
+      type: 'asset/resource',
+    });
     return config;
   },
 };

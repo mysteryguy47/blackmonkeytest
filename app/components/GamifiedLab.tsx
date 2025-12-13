@@ -4,6 +4,7 @@ import { useSound } from "@/hooks/use-sound";
 import { useRef } from 'react';
 import Link from "next/link";
 import { Trophy, Target, Zap, Star, Award, Gamepad2, ArrowRightIcon } from "lucide-react";
+import StarBorder from "@/components/StarBorder";
 
 export function GamifiedLab() {
   const features = [
@@ -155,17 +156,21 @@ export function GamifiedLab() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
           >
-          <Link href="/bmlab" target="_blank" rel="noopener noreferrer">
-          <Button
-            size="lg"
-            variant="outline"
-            className="text-lg px-8 py-6 border-2 hover:border-neon-purple hover:text-neon-purple transition-all duration-300"
-            data-testid="button-watch-demo"
+          <StarBorder 
+            as="a" 
+            href="/bmlab" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            color="#c59915" 
+            speed="5s" 
+            thickness={2}
+            className="cursor-pointer inline-flex items-center group transition-all duration-300 hover:scale-[1.03] active:scale-[0.97]" 
+            contentClassName="text-lg font-semibold px-6 !h-14 !bg-gradient-to-br !from-slate-900/95 !to-slate-800/95 !text-white !border-0 hover:!text-white transition-all duration-300 !shadow-none !flex !items-center !justify-center !gap-2.5 backdrop-blur-md rounded-xl"
             onMouseEnter={() => play("hover")}
-            >
-            BlackMonkey Lab<ArrowRightIcon className="h-5 w-5" />
-          </Button>
-          </Link>
+          >
+            <span className="whitespace-nowrap">BlackMonkey Lab</span>
+            <ArrowRightIcon className="h-5 w-5 transition-all duration-300 group-hover:translate-x-1.5 group-hover:scale-110" />
+          </StarBorder>
           </motion.div>
           </motion.div>
         </div>

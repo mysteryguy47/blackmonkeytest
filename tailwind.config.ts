@@ -8,6 +8,7 @@ export default {
   ],
   theme: {
     extend: {
+      
       borderRadius: {
         lg: ".5625rem", /* 9px */
         md: ".375rem", /* 6px */
@@ -96,12 +97,21 @@ export default {
         sans: ["Inter", "var(--font-sans)"],
         display: ["Space Grotesk", "var(--font-sans)"],
         mono: ["JetBrains Mono", "var(--font-mono)"],
+        satoshi: ["Satoshi", "sans-serif"],
       },
       keyframes: {
         float: {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-20px)" },
         },
+        'star-movement-bottom': {
+    '0%': { transform: 'translate(0%, 0%)', opacity: '1' },
+    '100%': { transform: 'translate(-100%, 0%)', opacity: '0' },
+  },
+  'star-movement-top': {
+    '0%': { transform: 'translate(0%, 0%)', opacity: '1' },
+    '100%': { transform: 'translate(100%, 0%)', opacity: '0' },
+  },
         pulse: {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.5" },
@@ -138,6 +148,8 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        'star-movement-bottom': 'star-movement-bottom linear infinite alternate',
+        'star-movement-top': 'star-movement-top linear infinite alternate',
         float: "float 6s ease-in-out infinite",
         pulse: "pulse 2s ease-in-out infinite",
         glow: "glow 3s ease-in-out infinite",
