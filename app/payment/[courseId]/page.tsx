@@ -14,12 +14,18 @@ import { Footer } from "@/components/Footer";
 export default function PaymentPage() {
   const params = useParams();
   const router = useRouter();
-  const courseId = params.courseId as string;
+  const courseId = params?.courseId as string | undefined;
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    if (!courseId) {
+      setLoading(false);
+      return;
+    }
+    
     const foundCourse = coursesData.find((c) => c.id === courseId);
     if (foundCourse) {
       setCourse(foundCourse);
