@@ -226,7 +226,7 @@ export function AdvancedModal({ course, isOpen, onClose }: AdvancedModalProps) {
               </div>
 
               {/* Close Button */}
-              <button
+              <motion.button
                 onClick={onClose}
                 onHoverStart={() => play("hover")}
                 className="absolute top-8 right-8 w-10 h-10 rounded-xl flex items-center justify-center text-muted-foreground hover:text-foreground transition-all duration-300 border border-border/40 hover:border-border/60 z-20"
@@ -236,7 +236,7 @@ export function AdvancedModal({ course, isOpen, onClose }: AdvancedModalProps) {
                 data-testid="button-modal-close"
               >
                 <X className="w-4 h-4" />
-              </button>
+              </motion.button>
 
               <div className="relative p-10 sm:p-14 z-10">
                 {/* Premium Header */}
