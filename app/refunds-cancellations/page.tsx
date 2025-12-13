@@ -1,8 +1,17 @@
-"use client";
-
-import { motion } from "framer-motion";
+import { Metadata } from "next";
 import { Card } from "@/components/ui/card";
 import { RefreshCw, Clock, XCircle, CheckCircle, AlertCircle, CreditCard } from "lucide-react";
+import { AnimatedSection, AnimatedHeader } from "@/components/AnimatedSection";
+
+export const metadata: Metadata = {
+  title: "Refunds & Cancellations - BlackMonkey",
+  description: "Read BlackMonkey's refund and cancellation policy. Learn about eligible refund scenarios, cancellation process, and refund processing times.",
+  openGraph: {
+    title: "Refunds & Cancellations - BlackMonkey",
+    description: "Read BlackMonkey's refund and cancellation policy. Learn about eligible refund scenarios, cancellation process, and refund processing times.",
+    type: "website",
+  },
+};
 
 export default function RefundsCancellationsPage() {
   const sections = [
@@ -72,11 +81,7 @@ export default function RefundsCancellationsPage() {
     <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
       <main className="relative z-10 pt-32 pb-20">
         <div className="max-w-4xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-16"
-          >
+          <AnimatedHeader className="text-center mb-16">
             <h1
               className="font-display font-bold mb-6"
               style={{
@@ -101,14 +106,10 @@ export default function RefundsCancellationsPage() {
             <p className="text-sm text-muted-foreground mt-4">
               Last updated: January 2025
             </p>
-          </motion.div>
+          </AnimatedHeader>
 
           <div className="space-y-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-            >
+            <AnimatedSection delay={0.1}>
               <Card className="p-8 border-neon-purple/30 bg-card/50">
                 <p className="text-muted-foreground leading-relaxed mb-6">
                   At BlackMonkey, we are committed to providing high-quality STEM education courses. We understand that sometimes circumstances change, and you may need to cancel your enrollment or request a refund. This policy outlines the terms and conditions for refunds and cancellations.
@@ -117,15 +118,10 @@ export default function RefundsCancellationsPage() {
                   Please read this policy carefully before making a purchase. By purchasing a course, you agree to the terms outlined in this refund and cancellation policy.
                 </p>
               </Card>
-            </motion.div>
+            </AnimatedSection>
 
             {sections.map((section, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + idx * 0.1 }}
-              >
+              <AnimatedSection key={idx} delay={0.2 + idx * 0.1}>
                 <Card className="p-8 border-neon-purple/30 bg-card/50 hover:border-neon-purple/50 transition-colors">
                   <div className="flex items-start gap-4 mb-4">
                     <section.icon className="w-6 h-6 text-neon-purple flex-shrink-0 mt-1" />
@@ -144,14 +140,10 @@ export default function RefundsCancellationsPage() {
                     ))}
                   </div>
                 </Card>
-              </motion.div>
+              </AnimatedSection>
             ))}
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-            >
+            <AnimatedSection delay={0.8}>
               <Card className="p-8 border-neon-purple/30 bg-card/50">
                 <h2 className="text-2xl font-bold text-foreground mb-4">
                   How to Request a Refund
@@ -168,13 +160,9 @@ export default function RefundsCancellationsPage() {
                   </ol>
                 </div>
               </Card>
-            </motion.div>
+            </AnimatedSection>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9 }}
-            >
+            <AnimatedSection delay={0.9}>
               <Card className="p-8 border-neon-purple/30 bg-card/50">
                 <h2 className="text-2xl font-bold text-foreground mb-4">
                   Questions?
@@ -188,7 +176,7 @@ export default function RefundsCancellationsPage() {
                   <p>Address: Gurgaon, Haryana, India</p>
                 </div>
               </Card>
-            </motion.div>
+            </AnimatedSection>
           </div>
         </div>
       </main>

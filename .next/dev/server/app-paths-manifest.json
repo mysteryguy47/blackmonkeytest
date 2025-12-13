@@ -1,4 +1,8 @@
 {
   "/page": "app/page.js",
-  "/bmlab/page": "app/bmlab/page.js"
+  "/bmlab/page": "app/bmlab/page.js",
+  "/terms-of-service/page": "app/terms-of-service/page.js",
+  "/privacy-policy/page": "app/privacy-policy/page.js",
+  "/refunds-cancellations/page": "app/refunds-cancellations/page.js",
+  "/cookies/page": "app/cookies/page.js"
 }

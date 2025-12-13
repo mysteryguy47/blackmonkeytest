@@ -1,8 +1,17 @@
-"use client";
-
-import { motion } from "framer-motion";
+import { Metadata } from "next";
 import { Card } from "@/components/ui/card";
 import { Shield, Lock, Eye, FileText, Users, Database } from "lucide-react";
+import { AnimatedSection, AnimatedHeader } from "@/components/AnimatedSection";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy - BlackMonkey",
+  description: "Read BlackMonkey's Privacy Policy. Learn how we collect, use, and protect your personal information on our STEM education platform.",
+  openGraph: {
+    title: "Privacy Policy - BlackMonkey",
+    description: "Read BlackMonkey's Privacy Policy. Learn how we collect, use, and protect your personal information on our STEM education platform.",
+    type: "website",
+  },
+};
 
 export default function PrivacyPolicyPage() {
   const sections = [
@@ -72,11 +81,7 @@ export default function PrivacyPolicyPage() {
     <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
       <main className="relative z-10 pt-32 pb-20">
         <div className="max-w-4xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-16"
-          >
+          <AnimatedHeader className="text-center mb-16">
             <h1
               className="font-display font-bold mb-6"
               style={{
@@ -101,14 +106,10 @@ export default function PrivacyPolicyPage() {
             <p className="text-sm text-muted-foreground mt-4">
               Last updated: January 2025
             </p>
-          </motion.div>
+          </AnimatedHeader>
 
           <div className="space-y-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-            >
+            <AnimatedSection delay={0.1}>
               <Card className="p-8 border-neon-purple/30 bg-card/50">
                 <p className="text-muted-foreground leading-relaxed mb-6">
                   At BlackMonkey, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy describes how we collect, use, disclose, and safeguard your information when you visit our website and use our services.
@@ -117,15 +118,10 @@ export default function PrivacyPolicyPage() {
                   By using our website and services, you agree to the collection and use of information in accordance with this policy. If you do not agree with our policies and practices, please do not use our services.
                 </p>
               </Card>
-            </motion.div>
+            </AnimatedSection>
 
             {sections.map((section, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + idx * 0.1 }}
-              >
+              <AnimatedSection key={idx} delay={0.2 + idx * 0.1}>
                 <Card className="p-8 border-neon-purple/30 bg-card/50 hover:border-neon-purple/50 transition-colors">
                   <div className="flex items-start gap-4 mb-4">
                     <section.icon className="w-6 h-6 text-neon-purple flex-shrink-0 mt-1" />
@@ -144,14 +140,10 @@ export default function PrivacyPolicyPage() {
                     ))}
                   </div>
                 </Card>
-              </motion.div>
+              </AnimatedSection>
             ))}
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-            >
+            <AnimatedSection delay={0.8}>
               <Card className="p-8 border-neon-purple/30 bg-card/50">
                 <h2 className="text-2xl font-bold text-foreground mb-4">
                   Changes to This Privacy Policy
@@ -163,13 +155,9 @@ export default function PrivacyPolicyPage() {
                   You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
                 </p>
               </Card>
-            </motion.div>
+            </AnimatedSection>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9 }}
-            >
+            <AnimatedSection delay={0.9}>
               <Card className="p-8 border-neon-purple/30 bg-card/50">
                 <h2 className="text-2xl font-bold text-foreground mb-4">
                   Contact Us
@@ -183,7 +171,7 @@ export default function PrivacyPolicyPage() {
                   <p>Address: Gurgaon, Haryana, India</p>
                 </div>
               </Card>
-            </motion.div>
+            </AnimatedSection>
           </div>
         </div>
       </main>

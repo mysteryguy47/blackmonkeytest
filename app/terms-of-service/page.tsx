@@ -1,8 +1,17 @@
-"use client";
-
-import { motion } from "framer-motion";
+import { Metadata } from "next";
 import { Card } from "@/components/ui/card";
 import { FileText, BookOpen, CreditCard, GraduationCap, AlertTriangle, Gavel } from "lucide-react";
+import { AnimatedSection, AnimatedHeader } from "@/components/AnimatedSection";
+
+export const metadata: Metadata = {
+  title: "Terms of Service - BlackMonkey",
+  description: "Read BlackMonkey's Terms of Service. Understand the terms and conditions for using our STEM education platform and courses.",
+  openGraph: {
+    title: "Terms of Service - BlackMonkey",
+    description: "Read BlackMonkey's Terms of Service. Understand the terms and conditions for using our STEM education platform and courses.",
+    type: "website",
+  },
+};
 
 export default function TermsOfServicePage() {
   const sections = [
@@ -71,11 +80,7 @@ export default function TermsOfServicePage() {
     <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
       <main className="relative z-10 pt-32 pb-20">
         <div className="max-w-4xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-16"
-          >
+          <AnimatedHeader className="text-center mb-16">
             <h1
               className="font-display font-bold mb-6"
               style={{
@@ -100,14 +105,10 @@ export default function TermsOfServicePage() {
             <p className="text-sm text-muted-foreground mt-4">
               Last updated: January 2025
             </p>
-          </motion.div>
+          </AnimatedHeader>
 
           <div className="space-y-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-            >
+            <AnimatedSection delay={0.1}>
               <Card className="p-8 border-neon-purple/30 bg-card/50">
                 <p className="text-muted-foreground leading-relaxed mb-6">
                   Welcome to BlackMonkey. These Terms of Service ("Terms") govern your access to and use of our website, courses, and related services (collectively, the "Services"). By accessing or using our Services, you agree to be bound by these Terms.
@@ -116,15 +117,10 @@ export default function TermsOfServicePage() {
                   If you disagree with any part of these terms, then you may not access the Services. We reserve the right to update, change, or replace any part of these Terms of Service by posting updates and/or changes to our website.
                 </p>
               </Card>
-            </motion.div>
+            </AnimatedSection>
 
             {sections.map((section, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + idx * 0.1 }}
-              >
+              <AnimatedSection key={idx} delay={0.2 + idx * 0.1}>
                 <Card className="p-8 border-neon-purple/30 bg-card/50 hover:border-neon-purple/50 transition-colors">
                   <div className="flex items-start gap-4 mb-4">
                     <section.icon className="w-6 h-6 text-neon-purple flex-shrink-0 mt-1" />
@@ -143,14 +139,10 @@ export default function TermsOfServicePage() {
                     ))}
                   </div>
                 </Card>
-              </motion.div>
+              </AnimatedSection>
             ))}
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-            >
+            <AnimatedSection delay={0.8}>
               <Card className="p-8 border-neon-purple/30 bg-card/50">
                 <h2 className="text-2xl font-bold text-foreground mb-4">
                   Changes to Terms
@@ -162,13 +154,9 @@ export default function TermsOfServicePage() {
                   What constitutes a material change will be determined at our sole discretion. By continuing to access or use our Services after any revisions become effective, you agree to be bound by the revised terms.
                 </p>
               </Card>
-            </motion.div>
+            </AnimatedSection>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9 }}
-            >
+            <AnimatedSection delay={0.9}>
               <Card className="p-8 border-neon-purple/30 bg-card/50">
                 <h2 className="text-2xl font-bold text-foreground mb-4">
                   Contact Information
@@ -182,7 +170,7 @@ export default function TermsOfServicePage() {
                   <p>Address: Gurgaon, Haryana, India</p>
                 </div>
               </Card>
-            </motion.div>
+            </AnimatedSection>
           </div>
         </div>
       </main>

@@ -1,8 +1,17 @@
-"use client";
-
-import { motion } from "framer-motion";
+import { Metadata } from "next";
 import { Card } from "@/components/ui/card";
 import { Cookie, Settings, Shield, BarChart, Target, Eye } from "lucide-react";
+import { AnimatedSection, AnimatedHeader } from "@/components/AnimatedSection";
+
+export const metadata: Metadata = {
+  title: "Cookie Policy - BlackMonkey",
+  description: "Learn about how BlackMonkey uses cookies and similar technologies to enhance your browsing experience and improve our services.",
+  openGraph: {
+    title: "Cookie Policy - BlackMonkey",
+    description: "Learn about how BlackMonkey uses cookies and similar technologies to enhance your browsing experience and improve our services.",
+    type: "website",
+  },
+};
 
 export default function CookiesPage() {
   const cookieTypes = [
@@ -75,11 +84,7 @@ export default function CookiesPage() {
     <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
       <main className="relative z-10 pt-32 pb-20">
         <div className="max-w-4xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-16"
-          >
+          <AnimatedHeader className="text-center mb-16">
             <h1
               className="font-display font-bold mb-6"
               style={{
@@ -104,14 +109,10 @@ export default function CookiesPage() {
             <p className="text-sm text-muted-foreground mt-4">
               Last updated: January 2025
             </p>
-          </motion.div>
+          </AnimatedHeader>
 
           <div className="space-y-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-            >
+            <AnimatedSection delay={0.1}>
               <Card className="p-8 border-neon-purple/30 bg-card/50">
                 <p className="text-muted-foreground leading-relaxed mb-6">
                   This Cookie Policy explains what cookies are, how we use cookies on our website, and how you can control cookies. By using our website, you consent to the use of cookies in accordance with this policy.
@@ -120,24 +121,15 @@ export default function CookiesPage() {
                   Cookies are small text files that are placed on your computer or mobile device when you visit a website. They are widely used to make websites work more efficiently and provide information to the website owners.
                 </p>
               </Card>
-            </motion.div>
+            </AnimatedSection>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
+            <AnimatedSection delay={0.2}>
               <h2 className="text-3xl font-bold text-foreground mb-6">
                 Types of Cookies We Use
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {cookieTypes.map((type, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 + idx * 0.1 }}
-                  >
+                  <AnimatedSection key={idx} delay={0.3 + idx * 0.1}>
                     <Card className="p-6 border-neon-purple/30 bg-card/50 hover:border-neon-purple/50 transition-colors h-full">
                       <div className="flex items-start gap-4 mb-4">
                         <type.icon className="w-6 h-6 text-neon-purple flex-shrink-0 mt-1" />
@@ -159,18 +151,13 @@ export default function CookiesPage() {
                         </ul>
                       </div>
                     </Card>
-                  </motion.div>
+                  </AnimatedSection>
                 ))}
               </div>
-            </motion.div>
+            </AnimatedSection>
 
             {sections.map((section, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 + idx * 0.1 }}
-              >
+              <AnimatedSection key={idx} delay={0.7 + idx * 0.1}>
                 <Card className="p-8 border-neon-purple/30 bg-card/50 hover:border-neon-purple/50 transition-colors">
                   <div className="flex items-start gap-4 mb-4">
                     <section.icon className="w-6 h-6 text-neon-purple flex-shrink-0 mt-1" />
@@ -189,14 +176,10 @@ export default function CookiesPage() {
                     ))}
                   </div>
                 </Card>
-              </motion.div>
+              </AnimatedSection>
             ))}
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9 }}
-            >
+            <AnimatedSection delay={0.9}>
               <Card className="p-8 border-neon-purple/30 bg-card/50">
                 <h2 className="text-2xl font-bold text-foreground mb-4">
                   Managing Cookies
@@ -221,13 +204,9 @@ export default function CookiesPage() {
                   </div>
                 </div>
               </Card>
-            </motion.div>
+            </AnimatedSection>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.0 }}
-            >
+            <AnimatedSection delay={1.0}>
               <Card className="p-8 border-neon-purple/30 bg-card/50">
                 <h2 className="text-2xl font-bold text-foreground mb-4">
                   Contact Us
@@ -241,7 +220,7 @@ export default function CookiesPage() {
                   <p>Address: Gurgaon, Haryana, India</p>
                 </div>
               </Card>
-            </motion.div>
+            </AnimatedSection>
           </div>
         </div>
       </main>
