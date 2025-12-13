@@ -143,7 +143,6 @@ export function PaymentForm({ course, orderAmount, onSuccess, onCancel }: Paymen
     } catch (err) {
       console.error("Payment error:", err);
       setError(err instanceof Error ? err.message : "Payment initialization failed. Please try again.");
-      play("error");
     } finally {
       setLoading(false);
     }
