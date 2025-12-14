@@ -63,7 +63,8 @@ class Logger {
     }
     
     // In production, send to error tracking service
-    // Example: Sentry.captureException(error instanceof Error ? error : new Error(String(error)), { extra: context });
+    // Import and use: import { captureException } from "@/lib/sentry";
+    // captureException(error, context);
   }
 }
 

@@ -8,6 +8,7 @@ import { useSound } from "@/hooks/use-sound";
 import { Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Script from "next/script";
+import { clientLogger } from "@/lib/client-logger";
 
 interface PaymentFormProps {
   course: Course;
@@ -141,7 +142,10 @@ export function PaymentForm({ course, orderAmount, onSuccess, onCancel }: Paymen
       play("success");
       onSuccess?.();
     } catch (err) {
-      console.error("Payment error:", err);
+      clientLogger.error("Payment initialization failed", err, {
+        courseId: course.id,
+        orderAmount,
+      });
       setError(err instanceof Error ? err.message : "Payment initialization failed. Please try again.");
     } finally {
       setLoading(false);

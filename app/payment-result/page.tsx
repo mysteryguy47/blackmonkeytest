@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import DarkVeil from "@/components/DarkVeil";
 import { Footer } from "@/components/Footer";
+import { clientLogger } from "@/lib/client-logger";
 
 type PaymentStatus = "verifying" | "success" | "failed" | "pending";
 
@@ -62,7 +63,9 @@ function PaymentResultContent() {
           setError(`Payment status: ${data.status}`);
         }
       } catch (err) {
-        console.error("Payment verification error:", err);
+        clientLogger.error("Payment verification failed", err, {
+          orderId: orderIdParam,
+        });
         setStatus("failed");
         setError(err instanceof Error ? err.message : "Failed to verify payment status");
       }
