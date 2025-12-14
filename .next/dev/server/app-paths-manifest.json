@@ -1,7 +1,4 @@
 {
   "/page": "app/page.js",
-  "/courses/chakra/page": "app/courses/chakra/page.js",
-  "/courses/shunya/page": "app/courses/shunya/page.js",
-  "/payment/[courseId]/page": "app/payment/[courseId]/page.js",
-  "/_not-found/page": "app/_not-found/page.js"
+  "/courses/garuda/page": "app/courses/garuda/page.js"
 }

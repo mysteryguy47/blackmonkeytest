@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# Pre-commit hook disabled - linting tools removed
+# To re-enable, install eslint, prettier, and lint-staged
+exit 0
