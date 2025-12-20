@@ -1,5 +1,5 @@
 // app/api/auth/[...nextauth]/route.ts
-import NextAuth from "next-auth";
+import NextAuth, { type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { createClient } from "@supabase/supabase-js";
@@ -100,30 +100,30 @@ if (providers.length === 0) {
   );
 }
 
-const authOptions = {
+const authOptions: NextAuthOptions = {
   providers,
 
   callbacks: {
-    async jwt({ token, user, account }: { token: any, user: any, account: any }) {
+    async jwt({ token, user, account }) {
       // Initial sign in
       if (user) {
         token.id = user.id;
-        token.role = user.role;
+        token.role = (user as any).role;
         token.email = user.email;
         token.name = user.name;
       }
       return token;
     },
-    async session({ session, token }: { session: any, token: any }) {
+    async session({ session, token }) {
       if (session?.user) {
-        session.user.id = token.id;
-        session.user.role = token.role;
+        (session.user as any).id = token.id;
+        (session.user as any).role = token.role;
         session.user.email = token.email || session.user.email;
         session.user.name = token.name || session.user.name;
       }
       return session;
     },
-    async redirect({ url, baseUrl }: { url: string, baseUrl: string }) {
+    async redirect({ url, baseUrl }) {
       // This callback is called AFTER successful authentication
       // It should NOT interfere with OAuth initiation (which happens before this)
       
@@ -145,7 +145,7 @@ const authOptions = {
       // Default to baseUrl
       return baseUrl;
     },
-    async signIn({ user, account, profile }: { user: any, account: any, profile?: any }) {
+    async signIn({ user, account, profile }) {
       if (account?.provider === "google" && supabaseAdmin) {
         try {
           // Check if user exists, if not create them
@@ -207,7 +207,7 @@ const authOptions = {
   },
   // Session configuration
   session: {
-    strategy: "jwt",
+    strategy: "jwt" as const,
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   // Enable debug in development
