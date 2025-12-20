@@ -1,0 +1,168 @@
+[9 tools called]
+
+Based on my analysis of the `TestimonialSlider` and `ProductKits` components, here's a comprehensive checklist of everything you need to consider when transferring them to another repository:
+
+## 🔧 **Core Dependencies to Transfer**
+
+### **1. Type Definitions & Schemas**
+```typescript
+// From: shared/schema.ts
+export interface STEMKit {
+  id: string;
+  name: string;
+  subtitle: string;
+  price: string;
+  image: StaticImageData; // From 'next/image'
+  description: string;
+  features: string[];
+}
+
+export type TestimonialBM1 = {
+  id: string;
+  name: string;
+  role: string;
+  content: string;
+  order: number;
+}
+```
+
+### **2. Package Dependencies**
+```json
+{
+  "dependencies": {
+    "framer-motion": "^11.13.1",           // For animations
+    "react-intersection-observer": "^10.0.0", // For scroll-based animations
+    "@tanstack/react-query": "^5.60.5",   // For API data fetching (TestimonialSlider)
+    "lucide-react": "^0.453.0",           // For icons
+    "next": "16.0.10"                     // For StaticImageData type
+  }
+}
+```
+
+## 🎨 **Styling Requirements**
+
+### **3. Tailwind Configuration**
+```typescript
+// Add to tailwind.config.ts
+colors: {
+  neon: {
+    purple: "rgb(168, 85, 247)",
+    cyan: "rgb(34, 211, 238)",
+    pink: "rgb(236, 72, 153)",
+  }
+},
+fontFamily: {
+  display: ["Space Grotesk", "var(--font-sans)"],
+  tech: ["Audiowide", "sans-serif"]  // Custom font
+}
+```
+
+### **4. Custom CSS Classes**
+```css
+/* Add to globals.css */
+.neon-glow-purple {
+  text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+}
+
+.neon-glow-cyan {
+  text-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
+}
+
+.font-tech {
+  font-family: "Audiowide", sans-serif;
+}
+```
+
+## 📁 **Assets & Path Configuration**
+
+### **5. Path Aliases Setup**
+```json
+// tsconfig.json paths
+{
+  "paths": {
+    "@/*": ["./app/*"],
+    "@shared/*": ["./shared/*"],
+    "@assets/*": ["./assets/*"]
+  }
+}
+```
+
+### **6. Image Assets**
+```
+/assets/generated_images/
+├── zero_spark_kit_product.png
+├── chakra_builder_kit_product.png
+├── surya_smart_maker_kit.png
+├── tejas_innovator_kit_product.png
+└── garuda_aviator_kit_product.png
+```
+
+## 🔌 **Runtime Dependencies**
+
+### **7. React Query Setup** (for TestimonialSlider)
+```typescript
+// If using API data, you'll need:
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
+
+<QueryClientProvider client={queryClient}>
+  <TestimonialSlider />
+</QueryClientProvider>
+```
+
+### **8. Font Loading**
+```typescript
+// In layout.tsx or _app.tsx
+import { Space_Grotesk, Audiowide } from 'next/font/google';
+
+const spaceGrotesk = Space_Grotesk({ 
+  subsets: ['latin'],
+  variable: '--font-space-grotesk'
+});
+
+const audiowide = Audiowide({ 
+  subsets: ['latin'],
+  variable: '--font-audiowide'
+});
+```
+
+## ⚠️ **Critical Considerations**
+
+### **9. Component Modifications Needed**
+
+**For ProductKits.tsx:**
+- Update image imports: `import image from '@assets/generated_images/filename.png'`
+- Ensure images are copied to the new repo's assets folder
+
+**For TestimonialSlider.tsx:**
+- Replace API call (`useQuery`) with static data or update API endpoint
+- Fallback testimonials are already included in the component
+
+### **10. Environment Setup**
+- Next.js 13+ with App Router
+- TypeScript configuration
+- Tailwind CSS setup
+- Font loading configuration
+
+## 📋 **Transfer Checklist**
+
+- [ ] Copy component files (`TestimonialSlider.tsx`, `ProductKits.tsx`)
+- [ ] Copy type definitions from `shared/schema.ts`
+- [ ] Install required npm packages
+- [ ] Set up Tailwind config with custom colors/fonts
+- [ ] Add custom CSS classes to globals.css
+- [ ] Configure path aliases in tsconfig.json
+- [ ] Copy image assets to new repo
+- [ ] Set up React Query provider (if using API data)
+- [ ] Configure custom fonts
+- [ ] Test components render correctly
+
+## 🚀 **Minimal Working Setup**
+
+If you want a minimal transfer, you can:
+1. Replace the `useQuery` in TestimonialSlider with just the `fallbackTestimonials`
+2. Use placeholder images or remove image dependencies from ProductKits
+3. Inline the type definitions instead of importing from schema
+
+This would reduce external dependencies and make the components more self-contained for transfer.
