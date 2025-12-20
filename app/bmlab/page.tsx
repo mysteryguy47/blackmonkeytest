@@ -21,14 +21,14 @@ export default function BMLabPage() {
   const [selectedQuest, setSelectedQuest] = useState<number | null>(null);
   const [selectedBadge, setSelectedBadge] = useState<number | null>(null);
 
-  // Simple redirect to login if not authenticated (no loops, no complex logic)
-  useEffect(() => {
-    // Only redirect if we're sure we're not loading and not authenticated
-    if (status === "unauthenticated" && status !== "loading") {
-      // Use window.location to do a full redirect and break any potential loops
-      window.location.href = `/dev/login?callbackUrl=${encodeURIComponent(window.location.origin + "/bmlab")}`;
-    }
-  }, [status]);
+      // Simple redirect to login if not authenticated (no loops, no complex logic)
+      useEffect(() => {
+        // Only redirect if we're sure we're not loading and not authenticated
+        if (status === "unauthenticated") {
+          // Use window.location to do a full redirect and break any potential loops
+          window.location.href = `/dev/login?callbackUrl=${encodeURIComponent(window.location.origin + "/bmlab")}`;
+        }
+      }, [status]);
 
   // Show loading state while checking authentication
   if (status === "loading") {
