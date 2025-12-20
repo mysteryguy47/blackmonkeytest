@@ -147,6 +147,12 @@ const authOptions: NextAuthOptions = {
     },
     async signIn({ user, account, profile }) {
       if (account?.provider === "google" && supabaseAdmin) {
+        // Guard against missing email - required for user lookup/creation
+        if (!user?.email) {
+          console.error("OAuth sign-in failed: User email is missing");
+          return false; // Reject sign-in if email is missing
+        }
+
         try {
           // Check if user exists, if not create them
           const { data: existingUser, error: checkError } = await supabaseAdmin
@@ -164,8 +170,9 @@ const authOptions: NextAuthOptions = {
 
           if (!existingUser || existingUser.length === 0) {
             // Create new OAuth user
+            // user.email is guaranteed to exist due to guard above
             const { error: insertError } = await supabaseAdmin!.from("users").insert({
-              email: user.email || "",
+              email: user.email,
               name: user.name || "",
               role: "user"
               // password_hash is null for OAuth users
