@@ -92,17 +92,23 @@ export function StructuredData({ type, data }: StructuredDataProps) {
         };
 
       case "FAQPage":
+        const faqs = Array.isArray(data.faqs) ? data.faqs : [];
         return {
           "@context": "https://schema.org",
           "@type": "FAQPage",
-          mainEntity: (data.faqs || []).map((faq: { q: string; a: string }) => ({
-            "@type": "Question",
-            name: faq.q,
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: faq.a,
-            },
-          })),
+          mainEntity: faqs.map((faq: unknown) => {
+            if (typeof faq === "object" && faq !== null && "q" in faq && "a" in faq) {
+              return {
+                "@type": "Question",
+                name: String((faq as { q: string; a: string }).q),
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: String((faq as { q: string; a: string }).a),
+                },
+              };
+            }
+            return null;
+          }).filter((item): item is NonNullable<typeof item> => item !== null),
         };
 
       case "AggregateRating":
