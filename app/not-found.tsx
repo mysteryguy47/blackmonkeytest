@@ -1,16 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Home, Search, ArrowLeft } from "lucide-react";
-
-export const metadata = {
-  title: "404 - Page Not Found | BlackMonkey",
-  description: "The page you're looking for doesn't exist.",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
+import { Home, Search } from "lucide-react";
 
 export default function NotFound() {
   return (
