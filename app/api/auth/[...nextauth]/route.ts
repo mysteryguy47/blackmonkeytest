@@ -5,6 +5,8 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { createClient } from "@supabase/supabase-js";
 import bcrypt from "bcryptjs"; // <- bcryptjs here
 
+console.log("AUTH URL:", process.env.NEXTAUTH_URL);
+
 // server-side supabase client (only if env vars are present)
 let supabaseAdmin: ReturnType<typeof createClient> | null = null;
 if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
