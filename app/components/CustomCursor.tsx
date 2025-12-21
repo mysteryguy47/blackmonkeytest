@@ -58,8 +58,8 @@ export function CustomCursor() {
       height: 32,
     },
     hover: {
-      width: 48,
-      height: 48,
+      width: 32,
+      height: 32,
     },
   };
 

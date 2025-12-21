@@ -46,3 +46,4 @@ If the status is **"In production"**, you need to change it to **"Testing"**:
 
 Your app should be in **Testing** mode with only your 2 test user emails listed in the **Test users** section.
 
+
