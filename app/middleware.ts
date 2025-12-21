@@ -100,7 +100,7 @@ function getCORSHeaders(origin: string | null): Record<string, string> {
  * Next.js Middleware
  * Handles security headers, CORS, and rate limiting
  */
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const origin = request.headers.get("origin");
   
@@ -127,6 +127,10 @@ export function middleware(request: NextRequest) {
   const clientIP = getClientIP(request);
   const rateLimitResult = await checkRateLimit(clientIP, pathname);
   
+  // Determine rate limit config for headers
+  const isApiRoute = pathname.startsWith("/api/");
+  const maxRequests = isApiRoute ? 10 : 100;
+  
   if (!rateLimitResult.allowed) {
     const response = NextResponse.json(
       {
@@ -137,11 +141,7 @@ export function middleware(request: NextRequest) {
     );
     
     // Add rate limit headers
-    response.headers.set("X-RateLimit-Limit", String(
-      pathname.startsWith("/api/") 
-        ? RATE_LIMIT_CONFIG.api.maxRequests 
-        : RATE_LIMIT_CONFIG.general.maxRequests
-    ));
+    response.headers.set("X-RateLimit-Limit", String(maxRequests));
     response.headers.set("X-RateLimit-Remaining", "0");
     response.headers.set("X-RateLimit-Reset", String(rateLimitResult.resetTime));
     response.headers.set("Retry-After", String(Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000)));
