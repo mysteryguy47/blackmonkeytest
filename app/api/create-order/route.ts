@@ -4,6 +4,8 @@ import { Cashfree, CFEnvironment } from "cashfree-pg";
 import { createOrderSchema } from "@/lib/validations";
 import { logger } from "@/lib/logger";
 import { getEnv } from "@/lib/env";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 /**
  * POST /api/create-order
