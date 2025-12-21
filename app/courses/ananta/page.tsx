@@ -28,6 +28,9 @@ import {
 import DarkVeil from "@/components/DarkVeil";
 import Image from "next/image";
 import { useSound } from "@/hooks/use-sound";
+import StarBorder from "@/components/StarBorder";
+import { StructuredData } from "@/components/StructuredData";
+import { Shield, Package, MessageCircle, Zap, ArrowRight } from "lucide-react";
 
 // Course product image paths
 const courseImageMap: Record<string, string> = {
@@ -41,9 +44,9 @@ const courseImageMap: Record<string, string> = {
 // Mock data for premium sections
 const courseProjects = {
   ananta: [
-    { title: "AI Security Camera", description: "Face recognition system", week: 5 },
-    { title: "Smart Garden", description: "Automated plant care with ML", week: 8 },
-    { title: "Predictive Maintenance", description: "IoT system with anomaly detection", week: 11 },
+    { title: "AI Security Camera", description: "Face recognition system", week: 5, parentOutcome: "Develops advanced AI and machine learning skills" },
+    { title: "Smart Garden", description: "Automated plant care with ML", week: 8, parentOutcome: "Builds understanding of real-world AI applications" },
+    { title: "Predictive Maintenance", description: "IoT system with anomaly detection", week: 11, parentOutcome: "Prepares for professional-level projects" },
   ],
 };
 
@@ -59,8 +62,9 @@ const kitContents = {
 
 const courseTestimonials = {
   ananta: [
-    { name: "Karan, Age 15", text: "AI integration blew my mind. This is the future!", rating: 5 },
-    { name: "Ananya, Age 14", text: "Most advanced course I've taken. Worth every moment!", rating: 5 },
+    { name: "Karan, Age 15", text: "AI integration blew my mind. This is the future!", rating: 5, isParent: false },
+    { name: "Ananya, Age 14", text: "Most advanced course I've taken. Worth every moment!", rating: 5, isParent: false },
+    { name: "Dr. Meera S.", text: "My daughter's AI project was featured in her school science fair. Exceptional course!", rating: 5, isParent: true, childAge: "Age 15" },
   ],
 };
 
@@ -77,6 +81,7 @@ export default function AnantaPage() {
   const { play } = useSound();
   const [activeFAQ, setActiveFAQ] = useState<number | null>(null);
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
+  const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(new Set([0]));
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -106,8 +111,86 @@ export default function AnantaPage() {
   const testimonials = courseTestimonials.ananta;
   const faqs = courseFAQs.ananta;
 
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://blackmonkey.in";
+  const cleanBaseUrl = baseUrl.replace(/\/+$/, "");
+
   return (
     <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
+      {/* Course Schema Markup */}
+      <StructuredData
+        type="Course"
+        data={{
+          name: course.name,
+          description: course.fullDescription,
+          courseCode: course.code,
+          educationalLevel: course.ageGroup,
+          duration: course.duration,
+        }}
+      />
+      
+      {/* FAQPage Schema Markup */}
+      <StructuredData
+        type="FAQPage"
+        data={{
+          faqs: faqs,
+        }}
+      />
+      
+      {/* AggregateRating Schema Markup */}
+      <StructuredData
+        type="AggregateRating"
+        data={{
+          ratingValue: "4.9",
+          reviewCount: testimonials.length.toString(),
+        }}
+      />
+      
+      {/* BreadcrumbList Schema Markup */}
+      <StructuredData
+        type="BreadcrumbList"
+        data={{
+          items: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Home",
+              item: cleanBaseUrl,
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "Courses",
+              item: `${cleanBaseUrl}/courses`,
+            },
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: course.name,
+              item: `${cleanBaseUrl}/courses/${course.id}`,
+            },
+          ],
+        }}
+      />
+      
+      {/* Individual Review Schema for Testimonials */}
+      {testimonials.map((testimonial, index) => (
+        <StructuredData
+          key={index}
+          type="Review"
+          data={{
+            authorName: testimonial.name,
+            reviewBody: testimonial.text,
+            ratingValue: testimonial.rating.toString(),
+            courseName: course.name,
+            datePublished: new Date().toISOString(),
+            itemReviewed: {
+              "@type": "Course",
+              name: course.name,
+            },
+          }}
+        />
+      ))}
+      
       <div
         className="glass-container"
         style={{ width: "100vw", height: "100vh", position: "absolute" }}
@@ -192,62 +275,92 @@ export default function AnantaPage() {
               transition={{ duration: 0.6 }}
               className="mb-8"
             >
-              <Button
-                variant="ghost"
-                className="backdrop-blur-md border border-border/50 hover:border-border/80 transition-all duration-300"
-                onClick={handleBackToCourses}
+              <motion.div
+                whileHover={{ x: -2 }}
+                transition={{ duration: 0.2 }}
               >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Courses
-              </Button>
+                <Button
+                  variant="ghost"
+                  className="relative backdrop-blur-xl border border-border/30 hover:border-border/60 transition-all duration-300 rounded-xl px-4 py-2 hover:bg-slate-800/50 overflow-hidden group"
+                  onClick={handleBackToCourses}
+                >
+                  {/* Subtle shimmer */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100"
+                    initial={{ x: "-100%" }}
+                    whileHover={{ x: "100%" }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                  />
+                  <motion.div
+                    className="inline-flex items-center"
+                    whileHover={{ x: -2 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ArrowLeft className="w-4 h-4 mr-2 relative z-10" />
+                  </motion.div>
+                  <span className="relative z-10">Back to Courses</span>
+                </Button>
+              </motion.div>
             </motion.div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               {/* Left: Course Info */}
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
+                transition={{ duration: 0.7, delay: 0.1 }}
               >
                 <motion.div
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-3"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
+                  transition={{ delay: 0.2 }}
                 >
                   <Sparkles className="w-4 h-4" style={{ color: course.neonColor }} />
-                  <span className="text-sm font-medium">{course.code}</span>
+                  <span className="text-sm font-medium font-mono">{course.code}</span>
                 </motion.div>
 
                 <motion.h1
-                  className="font-display font-extrabold mb-6 leading-tight"
+                  className="font-display font-extrabold mb-4 leading-tight bg-clip-text text-transparent"
                   style={{
-                    fontSize: "clamp(3rem, 7vw, 5.5rem)",
+                    fontSize: "clamp(2.5rem, 6vw, 5rem)",
                     lineHeight: "1.1",
-                    background: `linear-gradient(to bottom right, ${course.neonColor}, ${course.neonColor}dd, rgb(255, 255, 255))`,
+                    backgroundImage: 'linear-gradient(to bottom right, rgb(168, 85, 247) 0%, rgb(200, 100, 245) 12%, rgb(236, 72, 153) 28%, rgb(200, 120, 240) 45%, rgb(34, 211, 238) 58%, rgb(180, 200, 250) 70%, rgb(240, 245, 255) 78%, rgb(255, 255, 255) 78%, rgb(255, 255, 255) 100%)',
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
                   }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
+                  transition={{ delay: 0.3 }}
                 >
                   {course.name}
                 </motion.h1>
 
                 <motion.p
-                  className="text-3xl md:text-4xl font-semibold mb-6 leading-relaxed"
-                  style={{ color: `${course.neonColor}ee` }}
+                  className="font-satoshi text-xl md:text-2xl text-foreground leading-relaxed mb-4 font-light"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
+                  transition={{ delay: 0.4 }}
                 >
                   {course.tagline}
                 </motion.p>
 
+                {/* Safety Reassurance */}
+                <motion.div
+                  className="flex items-center gap-2 mb-5"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <Shield className="w-4 h-4 text-green-400" />
+                  <p className="text-sm text-muted-foreground font-medium">
+                    100% safe · Expert guidance · Hands-on learning
+                  </p>
+                </motion.div>
+
                 <motion.p
-                  className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8 max-w-2xl"
+                  className="text-base md:text-lg text-muted-foreground leading-relaxed mb-6 max-w-2xl"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
@@ -255,85 +368,127 @@ export default function AnantaPage() {
                   {course.fullDescription}
                 </motion.p>
 
-                {/* Quick Stats */}
+                {/* Premium Pill Cards - Age / Duration / Projects */}
                 <motion.div
-                  className="flex flex-wrap gap-4 mb-8"
+                  className="flex flex-wrap gap-3 mb-6"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7 }}
                 >
                   {[
-                    { icon: Users, label: "Age", value: course.ageGroup },
+                    { icon: Users, label: "Age Group", value: course.ageGroup },
                     { icon: Clock, label: "Duration", value: course.duration },
                     { icon: Trophy, label: "Projects", value: `${projects.length}+` },
                   ].map((stat, idx) => (
                     <motion.div
                       key={idx}
-                      className="flex items-center gap-2 px-4 py-2 rounded-xl backdrop-blur-md border border-border/30"
+                      className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl backdrop-blur-xl border"
                       style={{
-                        background: `linear-gradient(135deg, ${course.neonColor}15, ${course.neonColor}08)`,
+                        background: `rgba(15, 23, 42, 0.6)`,
                         borderColor: `${course.neonColor}30`,
                       }}
-                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileHover={{ scale: 1.02, borderColor: `${course.neonColor}60` }}
+                      transition={{ duration: 0.2 }}
                     >
-                      <stat.icon className="w-5 h-5" style={{ color: course.neonColor }} />
+                      <stat.icon className="w-4 h-4" style={{ color: course.neonColor }} />
                       <div>
-                        <p className="text-xs text-muted-foreground">{stat.label}</p>
-                        <p className="text-sm font-semibold">{stat.value}</p>
+                        <p className="text-xs text-muted-foreground font-medium">{stat.label}</p>
+                        <p className="text-sm font-semibold text-foreground">{stat.value}</p>
                       </div>
                     </motion.div>
                   ))}
                 </motion.div>
 
-                {/* CTA Buttons */}
+                {/* Premium Minimal CTA Buttons */}
                 <motion.div
                   className="flex flex-col sm:flex-row gap-4"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8 }}
                 >
-                  <Link href={`/payment/${course.id}`} onClick={() => play("click")}>
-                    <Button
-                      size="lg"
-                      className="text-lg px-8 py-7 rounded-xl font-semibold hover:scale-105 transition-transform duration-300"
-                      style={{
-                        background: `linear-gradient(135deg, ${course.neonColor}, ${course.neonColor}dd)`,
-                        boxShadow: `0 8px 32px -8px ${course.neonColor}50`,
-                      }}
-                    >
-                      <Rocket className="w-5 h-5 mr-2" />
-                      Enroll Now
-                    </Button>
-                  </Link>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="text-lg px-8 py-7 rounded-xl font-semibold border-2 hover:scale-105 transition-transform duration-300"
+                  {/* Watch Preview - Premium Border */}
+                  <motion.button
+                    className="flex items-center justify-center gap-2.5 rounded-xl font-semibold text-base backdrop-blur-xl border-2 transition-all duration-300"
                     style={{
+                      padding: '24px 32px',
+                      minHeight: '56px',
                       borderColor: `${course.neonColor}50`,
+                      background: 'transparent',
+                      color: 'white',
                     }}
+                    whileHover={{ 
+                      scale: 1.02,
+                      borderColor: `${course.neonColor}80`,
+                    }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => play("hover")}
                   >
-                    <Video className="w-5 h-5 mr-2" />
-                    Watch Preview
-                  </Button>
+                    <Video className="w-4 h-4" />
+                    <span>Watch Preview</span>
+                  </motion.button>
+                  
+                  {/* Enroll Now - StarBorder with Premium Border */}
+                  <Link href={`/payment/${course.id}`} onClick={() => play("click")}>
+                    <StarBorder
+                      as="div"
+                      color={course.neonColor}
+                      speed="4s"
+                      thickness={2}
+                      className="cursor-pointer transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                      style={{
+                        minHeight: '56px',
+                      }}
+                      contentClassName="text-base font-semibold !px-8 !py-6 !bg-transparent !text-white !border-2 !border-transparent hover:!text-white transition-all duration-300 !shadow-none !flex !items-center !justify-center !gap-2.5 backdrop-blur-md rounded-xl"
+                      onMouseEnter={() => play("hover")}
+                    >
+                      <Rocket className="w-4 h-4" />
+                      <span>Enroll Now</span>
+                    </StarBorder>
+                  </Link>
                 </motion.div>
               </motion.div>
 
-              {/* Right: Product Showcase */}
+              {/* Right: Premium Product Showcase */}
               <motion.div
-                initial={{ opacity: 0, x: 50, scale: 0.9 }}
+                initial={{ opacity: 0, x: 50, scale: 0.95 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
+                transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 className="relative"
               >
                 {courseImageMap[course.id] && (
                   <motion.div
-                    className="relative h-[500px] md:h-[600px] rounded-3xl overflow-hidden"
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ duration: 0.4 }}
+                    className="relative h-[500px] md:h-[600px] rounded-3xl overflow-hidden group"
+                    whileHover={{ scale: 1.03, y: -5 }}
+                    animate={{
+                      y: [0, -10, 0],
+                    }}
+                    transition={{
+                      y: {
+                        duration: 6,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      },
+                      scale: {
+                        duration: 0.5,
+                        ease: [0.16, 1, 0.3, 1],
+                      },
+                    }}
                   >
-                    <div className="absolute inset-0">
+                    {/* Premium backdrop with gradient */}
+                    <div 
+                      className="absolute inset-0 rounded-3xl"
+                      style={{
+                        background: `linear-gradient(135deg, ${course.neonColor}15 0%, transparent 50%, ${course.neonColor}10 100%)`,
+                      }}
+                    />
+                    
+                    {/* Main image container */}
+                    <motion.div 
+                      className="absolute inset-0 z-10"
+                      initial={{ scale: 0.9, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    >
                       <Image
                         src={courseImageMap[course.id]}
                         alt={`${course.name} Product Kit`}
@@ -343,24 +498,57 @@ export default function AnantaPage() {
                         className="object-contain"
                         priority
                       />
-                    </div>
-                    {/* Glow effect */}
+                    </motion.div>
+                    
+                    {/* Animated glow orbs */}
                     <motion.div
-                      className="absolute inset-0 pointer-events-none"
+                      className="absolute inset-0 pointer-events-none z-0"
                       style={{
-                        background: `radial-gradient(circle at center, ${course.neonColor}20 0%, transparent 70%)`,
+                        background: `radial-gradient(circle at 30% 30%, ${course.neonColor}30 0%, transparent 50%)`,
                       }}
                       animate={{
-                        opacity: [0.3, 0.5, 0.3],
-                        scale: [1, 1.1, 1],
+                        opacity: [0.2, 0.4, 0.2],
+                        scale: [1, 1.2, 1],
+                        x: [0, 20, 0],
+                        y: [0, -20, 0],
+                      }}
+                      transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                    <motion.div
+                      className="absolute inset-0 pointer-events-none z-0"
+                      style={{
+                        background: `radial-gradient(circle at 70% 70%, ${course.neonColor}25 0%, transparent 50%)`,
+                      }}
+                      animate={{
+                        opacity: [0.2, 0.35, 0.2],
+                        scale: [1, 1.15, 1],
+                        x: [0, -15, 0],
+                        y: [0, 15, 0],
+                      }}
+                      transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    />
+                    
+                    {/* Premium border glow with hover effect */}
+                    <motion.div
+                      className="absolute inset-0 rounded-3xl pointer-events-none z-20"
+                      style={{
+                        boxShadow: `inset 0 0 40px ${course.neonColor}20, 0 0 60px ${course.neonColor}15`,
+                      }}
+                      animate={{
+                        boxShadow: [
+                          `inset 0 0 40px ${course.neonColor}20, 0 0 60px ${course.neonColor}15`,
+                          `inset 0 0 60px ${course.neonColor}30, 0 0 80px ${course.neonColor}25`,
+                          `inset 0 0 40px ${course.neonColor}20, 0 0 60px ${course.neonColor}15`,
+                        ],
                       }}
                       transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                     />
-                    {/* Border glow */}
-                    <div
-                      className="absolute inset-0 rounded-3xl pointer-events-none"
+                    
+                    {/* Shimmer effect on hover */}
+                    <motion.div
+                      className="absolute inset-0 pointer-events-none z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                       style={{
-                        boxShadow: `inset 0 0 60px ${course.neonColor}30, 0 0 80px ${course.neonColor}20`,
+                        background: `linear-gradient(135deg, transparent 0%, ${course.neonColor}10 50%, transparent 100%)`,
                       }}
                     />
                   </motion.div>
@@ -370,6 +558,53 @@ export default function AnantaPage() {
           </div>
         </motion.div>
 
+        {/* Course Snapshot Card - Quick Decision Zone */}
+        <section className="relative py-12 -mt-20">
+          <div className="max-w-7xl mx-auto px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <Card className="p-8 backdrop-blur-xl border-2 relative overflow-hidden"
+                style={{
+                  background: `linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(15, 23, 42, 0.6) 100%)`,
+                  borderColor: `${course.neonColor}40`,
+                  boxShadow: `0 20px 60px -20px ${course.neonColor}30`,
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-neon-purple/5 via-transparent to-neon-cyan/5" />
+                <div className="relative z-10">
+                  <h3 className="text-2xl font-bold mb-6 text-center">Course Snapshot</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    {[
+                      { icon: Users, label: "Age Group", value: course.ageGroup, color: "text-blue-400" },
+                      { icon: Clock, label: "Duration", value: course.duration, color: "text-purple-400" },
+                      { icon: Trophy, label: "Projects", value: `${projects.length}+`, color: "text-yellow-400" },
+                      { icon: Video, label: "Mode", value: "Live + Recorded", color: "text-pink-400" },
+                      { icon: Gift, label: "Kit", value: "Home Delivery", color: "text-green-400" },
+                    ].map((item, idx) => (
+                      <motion.div
+                        key={idx}
+                        className="text-center p-4 rounded-xl backdrop-blur-sm border border-border/20"
+                        style={{
+                          background: `linear-gradient(135deg, ${course.neonColor}10, transparent)`,
+                        }}
+                        whileHover={{ scale: 1.05, y: -2 }}
+                      >
+                        <item.icon className={`w-8 h-8 mx-auto mb-2 ${item.color}`} />
+                        <p className="text-xs text-muted-foreground mb-1 font-medium">{item.label}</p>
+                        <p className="text-sm font-bold text-foreground">{item.value}</p>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+          </div>
+        </section>
+
         {/* Curriculum Timeline - Interactive */}
         <section className="relative py-20">
           <div className="max-w-7xl mx-auto px-6">
@@ -377,96 +612,124 @@ export default function AnantaPage() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="text-center mb-16"
+              transition={{ duration: 0.6 }}
+              className="text-center mb-10"
             >
-              <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
+              <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">
                 Your Learning Journey
               </h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Step-by-step progression from beginner to master
+              <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+                Step-by-step progression from Week 1 to Week {course.duration}
               </p>
             </motion.div>
 
-            <div className="relative">
-              {/* Timeline line */}
-              <div
-                className="absolute left-8 md:left-1/2 top-0 bottom-0 w-1 hidden md:block"
-                style={{
-                  background: `linear-gradient(to bottom, ${course.neonColor}40, ${course.neonColor}20)`,
-                }}
-              />
-              
-              <div className="space-y-12">
-                {course.features.map((feature, index) => {
-                  const week = Math.ceil(((index + 1) / course.features.length) * parseInt(course.duration));
-                  return (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: index * 0.1 }}
-                      className={`flex flex-col md:flex-row items-start gap-6 ${
-                        index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                      }`}
-                    >
-                      {/* Timeline dot */}
-                      <div className="relative z-10 flex-shrink-0">
-                        <motion.div
-                          className="w-16 h-16 rounded-full flex items-center justify-center backdrop-blur-md border-2"
-                          style={{
-                            background: `linear-gradient(135deg, ${course.neonColor}30, ${course.neonColor}15)`,
-                            borderColor: course.neonColor,
-                            boxShadow: `0 0 30px ${course.neonColor}40`,
-                          }}
-                          whileHover={{ scale: 1.2, rotate: 360 }}
-                          transition={{ duration: 0.6 }}
-                        >
-                          <span className="text-2xl font-bold" style={{ color: course.neonColor }}>
-                            {index + 1}
-                          </span>
-                        </motion.div>
-                        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-xs font-mono text-muted-foreground whitespace-nowrap">
-                          Week {week}
-                        </div>
-                      </div>
-
-                      {/* Content Card */}
-                      <motion.div
-                        className="flex-1 max-w-md"
-                        whileHover={{ scale: 1.02, y: -5 }}
-                      >
-                        <Card
-                          className="p-6 backdrop-blur-xl border border-border/30 relative overflow-hidden"
-                          style={{
-                            background: `linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(15, 23, 42, 0.3) 100%)`,
-                            borderColor: `${course.neonColor}30`,
-                            boxShadow: `0 8px 32px -8px ${course.neonColor}20`,
-                          }}
-                        >
-                          <div className="relative z-10">
-                            <div className="flex items-center gap-3 mb-3">
-                              <div
-                                className="w-10 h-10 rounded-lg flex items-center justify-center"
-                                style={{
-                                  background: `linear-gradient(135deg, ${course.neonColor}30, ${course.neonColor}15)`,
-                                }}
-                              >
-                                <Lightbulb className="w-5 h-5" style={{ color: course.neonColor }} />
-                              </div>
-                              <h3 className="text-xl font-bold">{feature}</h3>
-                            </div>
-                            <p className="text-muted-foreground leading-relaxed">
-                              Master this concept through hands-on projects and interactive challenges.
-                            </p>
-                          </div>
-                        </Card>
-                      </motion.div>
-                    </motion.div>
-                  );
-                })}
+            {/* Premium Progress Bar */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mb-10 max-w-5xl mx-auto"
+            >
+              <div className="relative h-3 bg-slate-800/30 rounded-full overflow-hidden border border-slate-700/30">
+                <motion.div
+                  className="absolute inset-y-0 left-0 rounded-full"
+                  style={{
+                    background: `linear-gradient(to right, ${course.neonColor}, ${course.neonColor}dd)`,
+                  }}
+                  initial={{ width: "0%" }}
+                  whileInView={{ width: "100%" }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 2, ease: "easeOut" }}
+                />
+                <div className="absolute inset-0 flex items-center justify-between px-3">
+                  <span className="text-xs font-mono text-muted-foreground font-medium">Week 1</span>
+                  <span className="text-xs font-mono text-muted-foreground font-medium">Week {course.duration}</span>
+                </div>
               </div>
+            </motion.div>
+
+            <div className="space-y-3 max-w-5xl mx-auto">
+              {course.features.map((feature, index) => {
+                const week = Math.ceil(((index + 1) / course.features.length) * parseInt(course.duration));
+                const isExpanded = expandedWeeks.has(index);
+                const activityTypes = ["Hands-on build", "Guided activity", "Fun challenge"];
+                const activityType = activityTypes[index % activityTypes.length];
+                
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: index * 0.08 }}
+                  >
+                    <Card
+                      className="backdrop-blur-xl border overflow-hidden cursor-pointer transition-all duration-300"
+                      style={{
+                        background: `rgba(15, 23, 42, 0.6)`,
+                        borderColor: isExpanded ? `${course.neonColor}50` : `${course.neonColor}30`,
+                      }}
+                      onClick={() => {
+                        const newExpanded = new Set(expandedWeeks);
+                        if (isExpanded) {
+                          newExpanded.delete(index);
+                        } else {
+                          newExpanded.add(index);
+                        }
+                        setExpandedWeeks(newExpanded);
+                        play("click");
+                      }}
+                    >
+                      <motion.div
+                        className="p-5 flex items-center justify-between"
+                        whileHover={{ x: 3 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <div className="flex items-center gap-4 flex-1">
+                          <div
+                            className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                            style={{
+                              background: `linear-gradient(135deg, ${course.neonColor}25, ${course.neonColor}10)`,
+                              border: `1px solid ${course.neonColor}40`,
+                            }}
+                          >
+                            <span className="text-base font-bold font-mono" style={{ color: course.neonColor }}>
+                              {week}
+                            </span>
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-1">
+                              <h3 className="text-base font-semibold">{feature}</h3>
+                              <span className="text-xs px-2 py-0.5 rounded-md bg-slate-800/50 text-muted-foreground font-medium">
+                                {activityType}
+                              </span>
+                            </div>
+                            <AnimatePresence>
+                              {isExpanded && (
+                                <motion.p
+                                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                                  animate={{ opacity: 1, height: "auto", marginTop: 8 }}
+                                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                                  transition={{ duration: 0.3 }}
+                                  className="text-sm text-muted-foreground leading-relaxed"
+                                >
+                                  Master this concept through hands-on projects and interactive challenges.
+                                </motion.p>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        </div>
+                        <motion.div
+                          animate={{ rotate: isExpanded ? 180 : 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                        </motion.div>
+                      </motion.div>
+                    </Card>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -481,75 +744,65 @@ export default function AnantaPage() {
               transition={{ duration: 0.8 }}
               className="text-center mb-16"
             >
-              <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
+              <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">
                 Projects You'll Build
               </h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-base text-muted-foreground max-w-2xl mx-auto">
                 Real projects that kids love to show off
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {projects.map((project, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05, y: -10 }}
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setSelectedProject(selectedProject === index ? null : index);
-                    play("click");
-                  }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="h-full"
                 >
                   <Card
-                    className="p-8 h-full backdrop-blur-xl border border-border/30 relative overflow-hidden group"
+                    className="p-6 h-full backdrop-blur-xl border relative overflow-visible group"
                     style={{
-                      background: `linear-gradient(135deg, ${course.neonColor}12 0%, transparent 100%)`,
+                      background: `rgba(15, 23, 42, 0.7)`,
                       borderColor: `${course.neonColor}30`,
                     }}
                   >
-                    {/* Hover glow */}
+                    {/* Hover glow - outside card */}
                     <motion.div
-                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                      className="absolute -inset-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl -z-10"
                       style={{
-                        background: `radial-gradient(circle at center, ${course.neonColor}20 0%, transparent 70%)`,
+                        background: `linear-gradient(135deg, ${course.neonColor}30, ${course.neonColor}10)`,
+                        filter: 'blur(8px)',
                       }}
                     />
                     
                     <div className="relative z-10">
                       <div className="flex items-center justify-between mb-4">
                         <div
-                          className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl"
+                          className="w-12 h-12 rounded-lg flex items-center justify-center"
                           style={{
                             background: `linear-gradient(135deg, ${course.neonColor}30, ${course.neonColor}15)`,
+                            border: `1px solid ${course.neonColor}40`,
                           }}
                         >
-                          {index === 0 ? "🎨" : index === 1 ? "🚀" : "⭐"}
+                          <Zap className="w-6 h-6" style={{ color: course.neonColor }} />
                         </div>
-                        <span className="text-sm font-mono text-muted-foreground">
+                        <span className="text-xs font-mono text-muted-foreground bg-slate-800/50 px-2 py-1 rounded-md font-medium">
                           Week {project.week}
                         </span>
                       </div>
                       <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-                      <p className="text-muted-foreground leading-relaxed">{project.description}</p>
+                      <p className="text-sm text-muted-foreground leading-relaxed mb-4">{project.description}</p>
                       
-                      <AnimatePresence>
-                        {selectedProject === index && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="mt-4 pt-4 border-t border-border/20"
-                          >
-                            <p className="text-sm text-muted-foreground">
-                              This project teaches core concepts through hands-on building. You'll learn by doing!
-                            </p>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                      {/* Parent Outcome */}
+                      <div className="pt-3 border-t border-border/20">
+                        <p className="text-xs font-semibold text-foreground mb-1">Parent Benefit:</p>
+                        <p className="text-xs text-muted-foreground italic">
+                          "{project.parentOutcome}"
+                        </p>
+                      </div>
                     </div>
                   </Card>
                 </motion.div>
@@ -568,45 +821,71 @@ export default function AnantaPage() {
               transition={{ duration: 0.8 }}
               className="text-center mb-16"
             >
-              <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 flex items-center justify-center gap-3">
-                <Gift className="w-10 h-10" style={{ color: course.neonColor }} />
+              <h2 className="text-3xl md:text-4xl font-display font-bold mb-3 flex items-center justify-center gap-3">
+                <Gift className="w-8 h-8" style={{ color: course.neonColor }} />
                 What's Included
               </h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-base text-muted-foreground max-w-2xl mx-auto mb-6">
                 Everything you need in one premium kit
               </p>
+              
+              {/* Safety Assurance */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="max-w-3xl mx-auto p-6 rounded-xl backdrop-blur-xl border-2"
+                style={{
+                  background: `linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(15, 23, 42, 0.4) 100%)`,
+                  borderColor: `${course.neonColor}40`,
+                }}
+              >
+                <div className="flex items-start gap-4 mb-4">
+                  <Shield className="w-6 h-6 text-green-400 flex-shrink-0 mt-1" />
+                  <div className="text-left">
+                    <p className="font-semibold text-foreground mb-2">Safety First</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      All components are carefully curated, child-safe, and tested for home use. 
+                      No sharp edges, no heat, no soldering required. Meets international safety standards.
+                    </p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-border/30">
+                  {[
+                    { icon: Shield, label: "Child-safe materials", color: "text-green-400" },
+                    { icon: CheckCircle, label: "International standards", color: "text-blue-400" },
+                    { icon: Heart, label: "No sharp edges", color: "text-pink-400" },
+                  ].map((item, idx) => (
+                    <div key={idx} className="text-center">
+                      <item.icon className={`w-5 h-5 mx-auto mb-2 ${item.color}`} />
+                      <p className="text-xs text-muted-foreground">{item.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
             </motion.div>
 
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
               {kitItems.map((item, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-                  whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1, type: "spring", stiffness: 200 }}
-                  whileHover={{ scale: 1.1, rotate: 5, y: -5 }}
+                  transition={{ duration: 0.4, delay: index * 0.05 }}
                   className="cursor-pointer"
                 >
                   <Card
-                    className="p-6 text-center backdrop-blur-xl border border-border/30 relative overflow-hidden group"
+                    className="p-5 text-center backdrop-blur-xl border relative overflow-hidden group h-full"
                     style={{
-                      background: `linear-gradient(135deg, ${course.neonColor}15 0%, transparent 100%)`,
+                      background: `rgba(15, 23, 42, 0.6)`,
                       borderColor: `${course.neonColor}30`,
                     }}
                   >
                     <motion.div
-                      className="text-5xl mb-3"
-                      animate={{
-                        y: [0, -10, 0],
-                        rotate: [0, 5, -5, 0],
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        delay: index * 0.2,
-                        ease: "easeInOut",
-                      }}
+                      className="text-4xl mb-3 flex items-center justify-center"
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
                     >
                       {item.icon}
                     </motion.div>
@@ -628,16 +907,25 @@ export default function AnantaPage() {
               transition={{ duration: 0.8 }}
               className="text-center mb-16"
             >
-              <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
+              <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">
                 Skills You'll Master
               </h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-base text-muted-foreground max-w-2xl mx-auto">
                 Real skills that prepare you for the future
               </p>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {course.learningOutcomes.map((outcome, index) => (
+              {course.learningOutcomes.map((outcome, index) => {
+                const futureCourseLinks: Record<number, { name: string; color: string }> = {
+                  0: { name: "GARUDA (Drones)", color: "rgb(34, 211, 238)" },
+                  1: { name: "GARUDA (Drones)", color: "rgb(34, 211, 238)" },
+                  2: { name: "Professional Projects", color: "rgb(168, 85, 247)" },
+                  3: { name: "Professional Projects", color: "rgb(168, 85, 247)" },
+                };
+                const futureLink = futureCourseLinks[index];
+                
+                return (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
@@ -647,10 +935,10 @@ export default function AnantaPage() {
                   whileHover={{ scale: 1.02, x: index % 2 === 0 ? -5 : 5 }}
                 >
                   <Card
-                    className="p-6 backdrop-blur-xl border border-border/30 relative overflow-hidden group"
+                      className="p-6 backdrop-blur-xl border-2 relative overflow-hidden group"
                     style={{
-                      background: `linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(15, 23, 42, 0.3) 100%)`,
-                      borderColor: `${course.neonColor}30`,
+                        background: `linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(15, 23, 42, 0.4) 100%)`,
+                        borderColor: `${course.neonColor}40`,
                     }}
                   >
                     <div className="flex items-start gap-4">
@@ -664,16 +952,30 @@ export default function AnantaPage() {
                       >
                         <CheckCircle className="w-6 h-6" style={{ color: course.neonColor }} />
                       </motion.div>
-                      <p className="text-lg leading-relaxed flex-1">{outcome}</p>
+                        <div className="flex-1">
+                          <p className="text-lg leading-relaxed mb-2">{outcome}</p>
+                          {futureLink && (
+                            <div className="flex items-center gap-2 mt-3 pt-3 border-t border-border/30">
+                              <ArrowRight className="w-4 h-4 text-muted-foreground" />
+                              <span className="text-sm text-muted-foreground">
+                                Prepares for{" "}
+                                <span className="font-semibold" style={{ color: futureLink.color }}>
+                                  {futureLink.name}
+                                </span>
+                              </span>
+                            </div>
+                          )}
+                        </div>
                     </div>
                   </Card>
                 </motion.div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
 
-        {/* Student Testimonials */}
+        {/* Student & Parent Testimonials */}
         <section className="relative py-20">
           <div className="max-w-7xl mx-auto px-6">
             <motion.div
@@ -683,15 +985,15 @@ export default function AnantaPage() {
               transition={{ duration: 0.8 }}
               className="text-center mb-16"
             >
-              <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
-                What Students Say
+              <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">
+                What Families Say
               </h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Real feedback from kids who loved this course
+              <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+                Real feedback from kids and parents who loved this course
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {testimonials.map((testimonial, index) => (
                 <motion.div
                   key={index}
@@ -702,22 +1004,45 @@ export default function AnantaPage() {
                   whileHover={{ scale: 1.02, y: -5 }}
                 >
                   <Card
-                    className="p-8 backdrop-blur-xl border border-border/30 relative overflow-hidden"
+                    className="p-6 backdrop-blur-xl border relative overflow-hidden h-full flex flex-col"
                     style={{
-                      background: `linear-gradient(135deg, ${course.neonColor}10 0%, transparent 100%)`,
+                      background: `rgba(15, 23, 42, 0.7)`,
                       borderColor: `${course.neonColor}30`,
                     }}
                   >
-                    <div className="flex items-center gap-2 mb-4">
-                      {Array.from({ length: testimonial.rating }).map((_, i) => (
+                    {/* Star Rating */}
+                    <div className="flex items-center gap-1.5 mb-4">
+                      {Array.from({ length: 5 }).map((_, i) => (
                         <Star
                           key={i}
-                          className="w-5 h-5 fill-yellow-400 text-yellow-400"
+                          className={`w-4 h-4 ${
+                            i < testimonial.rating
+                              ? "fill-yellow-400 text-yellow-400"
+                              : "fill-slate-700 text-slate-700"
+                          }`}
                         />
                       ))}
                     </div>
-                    <p className="text-lg leading-relaxed mb-4 italic">"{testimonial.text}"</p>
-                    <p className="font-semibold text-foreground">— {testimonial.name}</p>
+                    
+                    <p className="text-base leading-relaxed mb-auto italic flex-grow">"{testimonial.text}"</p>
+                    
+                    <div className="flex items-center justify-between pt-4 mt-4 border-t border-border/20">
+                      <div>
+                        <p className="font-semibold text-sm text-foreground">{testimonial.name}</p>
+                        {testimonial.isParent && testimonial.childAge && (
+                          <p className="text-xs text-muted-foreground mt-0.5">{testimonial.childAge}</p>
+                        )}
+                      </div>
+                      {testimonial.isParent ? (
+                        <div className="px-2 py-0.5 rounded-md bg-blue-500/20 border border-blue-500/30">
+                          <span className="text-xs font-medium text-blue-400">Parent</span>
+                        </div>
+                      ) : (
+                        <div className="px-2 py-0.5 rounded-md bg-purple-500/20 border border-purple-500/30">
+                          <span className="text-xs font-medium text-purple-400">Student</span>
+                        </div>
+                      )}
+                    </div>
                   </Card>
                 </motion.div>
               ))}
@@ -735,10 +1060,10 @@ export default function AnantaPage() {
               transition={{ duration: 0.8 }}
               className="text-center mb-16"
             >
-              <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
+              <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">
                 Frequently Asked Questions
               </h2>
-              <p className="text-xl text-muted-foreground">
+              <p className="text-base text-muted-foreground">
                 Everything parents and kids want to know
               </p>
             </motion.div>
@@ -796,77 +1121,106 @@ export default function AnantaPage() {
           </div>
         </section>
 
-        {/* Premium CTA Section */}
-        <section className="relative py-20">
+        {/* Premium Final CTA Section */}
+        <section className="relative py-16">
           <div className="max-w-5xl mx-auto px-6">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.6 }}
             >
               <Card
-                className="p-16 text-center backdrop-blur-xl border border-border/30 relative overflow-hidden"
+                className="p-10 md:p-14 text-center backdrop-blur-2xl border relative overflow-hidden"
                 style={{
-                  background: `linear-gradient(135deg, ${course.neonColor}15 0%, ${course.neonColor}08 50%, transparent 100%)`,
-                  borderColor: `${course.neonColor}50`,
-                  boxShadow: `0 20px 60px -20px ${course.neonColor}40, inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
+                  background: `rgba(15, 23, 42, 0.8)`,
+                  borderColor: `${course.neonColor}40`,
                 }}
               >
-                {/* Animated background */}
-                <motion.div
-                  className="absolute inset-0"
-                  style={{
-                    background: `radial-gradient(circle at center, ${course.neonColor}20 0%, transparent 70%)`,
-                  }}
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.3, 0.5, 0.3],
-                  }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                />
+                {/* Subtle gradient overlay */}
+                <div className="absolute inset-0 opacity-20 pointer-events-none">
+                  <div className="absolute top-0 left-1/4 w-64 h-64 rounded-full blur-3xl" style={{ background: course.neonColor }} />
+                  <div className="absolute bottom-0 right-1/4 w-64 h-64 rounded-full blur-3xl" style={{ background: course.neonColor }} />
+                </div>
                 
                 <div className="relative z-10">
                   <motion.div
-                    className="inline-block mb-6"
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.1 }}
+                    className="mb-6"
                   >
-                    <Rocket className="w-16 h-16 mx-auto" style={{ color: course.neonColor }} />
-                  </motion.div>
-                  <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">
-                    Ready to Master Advanced IoT?
+                    <h2 className="text-3xl md:text-4xl font-display font-bold mb-3 leading-tight">
+                      <span className="font-satoshi font-light">This isn't just a course.</span>
+                      <br />
+                      <span className="bg-clip-text text-transparent" style={{
+                        backgroundImage: 'linear-gradient(to bottom right, rgb(168, 85, 247) 0%, rgb(200, 100, 245) 12%, rgb(236, 72, 153) 28%, rgb(200, 120, 240) 45%, rgb(34, 211, 238) 58%, rgb(180, 200, 250) 70%, rgb(240, 245, 255) 78%, rgb(255, 255, 255) 78%, rgb(255, 255, 255) 100%)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                      }}>
+                        It's the moment your child realizes they can build things.
+                      </span>
                   </h2>
-                  <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
+                  </motion.div>
+                  
+                  <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2 }}
+                    className="font-satoshi text-lg text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed font-light"
+                  >
                     Join hundreds of young creators building the future. Enroll now and get your premium kit delivered to your door.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Link href={`/payment/${course.id}`} onClick={() => play("click")}>
-                      <Button
-                        size="lg"
-                        className="text-lg px-10 py-7 rounded-xl font-semibold hover:scale-105 transition-transform duration-300"
-                        style={{
-                          background: `linear-gradient(135deg, ${course.neonColor}, ${course.neonColor}dd)`,
-                          boxShadow: `0 8px 32px -8px ${course.neonColor}50`,
-                        }}
-                      >
-                        <GraduationCap className="w-5 h-5 mr-2" />
-                        Enroll in {course.name}
-                      </Button>
-                    </Link>
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="text-lg px-10 py-7 rounded-xl font-semibold border-2 hover:scale-105 transition-transform duration-300"
+                  </motion.p>
+                  
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.3 }}
+                    className="flex flex-col sm:flex-row gap-4 justify-center"
+                  >
+                    {/* Talk to Us - Premium Border */}
+                    <motion.button
+                      className="flex items-center justify-center gap-2.5 rounded-xl font-semibold text-base backdrop-blur-xl border-2 transition-all duration-300"
                       style={{
+                        padding: '24px 32px',
+                        minHeight: '56px',
                         borderColor: `${course.neonColor}50`,
+                        background: 'transparent',
+                        color: 'white',
                       }}
+                      whileHover={{ 
+                        scale: 1.02,
+                        borderColor: `${course.neonColor}80`,
+                      }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => play("hover")}
                     >
-                      <Heart className="w-5 h-5 mr-2" />
-                      Learn More
-                    </Button>
-                  </div>
+                      <MessageCircle className="w-4 h-4" />
+                      <span>Talk to Us</span>
+                    </motion.button>
+                    
+                    {/* Enroll Now - StarBorder with Premium Border */}
+                    <Link href={`/payment/${course.id}`} onClick={() => play("click")}>
+                      <StarBorder
+                        as="div"
+                        color={course.neonColor}
+                        speed="4s"
+                        thickness={2}
+                        className="cursor-pointer transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                        style={{
+                          minHeight: '56px',
+                        }}
+                        contentClassName="text-base font-semibold !px-8 !py-6 !bg-transparent !text-white !border-2 !border-transparent hover:!text-white transition-all duration-300 !shadow-none !flex !items-center !justify-center !gap-2.5 backdrop-blur-md rounded-xl"
+                        onMouseEnter={() => play("hover")}
+                      >
+                        <Rocket className="w-4 h-4" />
+                        <span>Enroll Now</span>
+                      </StarBorder>
+                    </Link>
+                  </motion.div>
                 </div>
               </Card>
             </motion.div>

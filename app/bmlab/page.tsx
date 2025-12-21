@@ -1,12 +1,14 @@
 'use client';
 
+import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { 
   Trophy, Target, Zap, Star, Award, Gamepad2, ArrowRightIcon, Rocket, 
   Flame, Crown, TrendingUp, Users, Clock, CheckCircle2, BookOpen, 
   Puzzle, Brain, Code, Wrench, FlaskConical, Play, Lock, Unlock,
-  ChevronRight, Medal, Gift, Coins, BarChart3, Activity
+  ChevronRight, Medal, Gift, Coins, BarChart3, Activity, Eye, EyeOff,
+  Sparkles, ArrowUp, Calendar
 } from "lucide-react";
 import { useSound } from "@/hooks/use-sound";
 import { useState, useEffect } from 'react';
@@ -14,12 +16,20 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+// Helper component to render dynamic icons
+function IconRenderer({ icon: Icon, className }: { icon: React.ComponentType<{ className?: string }> | undefined; className?: string }) {
+  if (!Icon) return null;
+  const IconComponent = Icon;
+  return <IconComponent className={className} />;
+}
+
 export default function BMLabPage() {
   const { play } = useSound();
   const { data: session, status } = useSession();
   const router = useRouter();
   const [selectedQuest, setSelectedQuest] = useState<number | null>(null);
   const [selectedBadge, setSelectedBadge] = useState<number | null>(null);
+  const [parentView, setParentView] = useState(false);
 
       // Simple redirect to login if not authenticated (no loops, no complex logic)
       useEffect(() => {
@@ -144,13 +154,33 @@ export default function BMLabPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 pt-24 pb-20">
-        {/* Hero Section - Game Title Style */}
+        {/* Hero Section - Game Title Style with Parent View Toggle */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          className="text-center mb-16 relative"
         >
+          {/* Parent View Toggle */}
+          <motion.button
+            onClick={() => setParentView(!parentView)}
+            className="absolute top-0 right-0 flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800/80 backdrop-blur-sm border border-slate-700 hover:border-neon-purple/50 transition-all duration-300 group"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {parentView ? (
+              <>
+                <EyeOff className="w-4 h-4 text-muted-foreground group-hover:text-neon-purple transition-colors" />
+                <span className="text-sm font-medium text-foreground">Student View</span>
+              </>
+            ) : (
+              <>
+                <Eye className="w-4 h-4 text-muted-foreground group-hover:text-neon-purple transition-colors" />
+                <span className="text-sm font-medium text-foreground">Parent View</span>
+              </>
+            )}
+          </motion.button>
+
           <motion.div
             className="inline-block mb-6"
             animate={{ 
@@ -182,7 +212,10 @@ export default function BMLabPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            Level up your skills, complete quests, and become a STEM master! 🚀
+            {parentView 
+              ? "Track your child's progress, achievements, and growth journey 📊"
+              : "Level up your skills, complete quests, and become a STEM master! 🚀"
+            }
           </motion.p>
         </motion.div>
 
@@ -215,41 +248,105 @@ export default function BMLabPage() {
                 </div>
               </div>
 
-              {/* Progress to Next Level */}
-              <div className="mb-4">
-                <div className="flex justify-between text-xs text-slate-400 mb-2">
-                  <span>Next Level: 13</span>
-                  <span className="font-bold text-blue-400">73%</span>
+              {/* Enhanced Progress to Next Level */}
+              <div className="mb-6">
+                <div className="flex justify-between items-center mb-3">
+                  <div>
+                    <span className="text-xs text-slate-400 block mb-1">Progress to Level 13</span>
+                    <span className="text-lg font-bold text-blue-400">73% Complete</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="flex items-center gap-1 text-yellow-400 mb-1">
+                      <Flame className="w-4 h-4" />
+                      <span className="text-sm font-bold">7 Day Streak!</span>
+                    </div>
+                    <span className="text-xs text-slate-400">Keep it going!</span>
+                  </div>
                 </div>
-                <div className="h-3 bg-slate-700 rounded-full overflow-hidden">
+                <div className="relative h-4 bg-slate-700 rounded-full overflow-hidden border border-slate-600/50">
                   <motion.div
-                    className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+                    className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full relative"
                     initial={{ width: 0 }}
                     animate={{ width: "73%" }}
-                    transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-                  />
+                    transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
+                  </motion.div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-[10px] font-bold text-white drop-shadow-lg">653 XP to go</span>
+                  </div>
                 </div>
+                {parentView && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-3 p-3 rounded-lg bg-green-500/10 border border-green-500/20"
+                  >
+                    <p className="text-xs text-green-400 font-medium flex items-center gap-2">
+                      <Sparkles className="w-3 h-3" />
+                      Your child is making excellent progress! 73% to the next level.
+                    </p>
+                  </motion.div>
+                )}
               </div>
 
-              {/* Quick Stats */}
+              {/* Enhanced Quick Stats with Motivational Messages */}
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { icon: Trophy, label: "Badges", value: "12", color: "text-yellow-400" },
-                  { icon: Users, label: "Rank", value: "#47", color: "text-blue-400" },
-                  { icon: Clock, label: "Hours", value: "127", color: "text-purple-400" },
-                  { icon: CheckCircle2, label: "Done", value: "89", color: "text-green-400" },
+                  { 
+                    icon: Trophy, 
+                    label: "Badges", 
+                    value: "12", 
+                    color: "text-yellow-400",
+                    bgColor: "from-yellow-500/20 to-orange-500/20",
+                    message: parentView ? "12 achievements unlocked!" : "Keep collecting!"
+                  },
+                  { 
+                    icon: Users, 
+                    label: "Rank", 
+                    value: "#47", 
+                    color: "text-blue-400",
+                    bgColor: "from-blue-500/20 to-cyan-500/20",
+                    message: parentView ? "Top 50! Great work!" : "Climbing the ranks!"
+                  },
+                  { 
+                    icon: Clock, 
+                    label: "Hours", 
+                    value: "127", 
+                    color: "text-purple-400",
+                    bgColor: "from-purple-500/20 to-pink-500/20",
+                    message: parentView ? "127 hours of learning!" : "Time well spent!"
+                  },
+                  { 
+                    icon: CheckCircle2, 
+                    label: "Completed", 
+                    value: "89", 
+                    color: "text-green-400",
+                    bgColor: "from-green-500/20 to-emerald-500/20",
+                    message: parentView ? "89 projects done!" : "Almost at 100!"
+                  },
                 ].map((stat, i) => (
                   <motion.div
                     key={i}
-                    className="bg-slate-700/50 rounded-xl p-3 text-center"
+                    className={`bg-gradient-to-br ${stat.bgColor} rounded-xl p-3 text-center border border-slate-600/30 relative overflow-hidden group cursor-pointer`}
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.15 + i * 0.02 }}
-                    whileHover={{ scale: 1.05, backgroundColor: "rgba(51, 65, 85, 0.8)" }}
+                    whileHover={{ scale: 1.05, y: -2 }}
                   >
-                    <stat.icon className={`w-5 h-5 mx-auto mb-1 ${stat.color}`} />
-                    <p className="text-lg font-bold text-white">{stat.value}</p>
-                    <p className="text-xs text-slate-400 font-mono">{stat.label}</p>
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <IconRenderer icon={stat.icon} className={`w-5 h-5 mx-auto mb-1 ${stat.color} relative z-10`} />
+                    <p className="text-lg font-bold text-white relative z-10">{stat.value}</p>
+                    <p className="text-xs text-slate-300 font-mono relative z-10">{stat.label}</p>
+                    {parentView && (
+                      <motion.p
+                        initial={{ opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-[10px] text-slate-400 mt-1 relative z-10"
+                      >
+                        {stat.message}
+                      </motion.p>
+                    )}
                   </motion.div>
                 ))}
               </div>
@@ -272,7 +369,7 @@ export default function BMLabPage() {
                     <div className="flex justify-between items-center">
                       <div className="flex items-center gap-2">
                         <div className={`w-8 h-8 rounded-lg ${skill.color} flex items-center justify-center`}>
-                          <skill.icon className="w-4 h-4 text-white" />
+                          <IconRenderer icon={skill.icon} className="w-4 h-4 text-white" />
                         </div>
                         <span className="text-white font-medium">{skill.name}</span>
                       </div>
@@ -307,7 +404,24 @@ export default function BMLabPage() {
                 Active Quests
               </h2>
               <div className="space-y-4">
-                {quests.map((quest, index) => (
+                {quests.length === 0 ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-6 rounded-xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-2 border-blue-500/30 text-center"
+                  >
+                    <Target className="w-12 h-12 text-blue-400 mx-auto mb-3" />
+                    <h4 className="text-lg font-bold text-white mb-2">Ready for Your First Quest?</h4>
+                    <p className="text-sm text-slate-300 mb-4">Complete your current course to unlock exciting new challenges!</p>
+                    <Button
+                      className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+                      onClick={() => router.push("/")}
+                    >
+                      Explore Courses
+                    </Button>
+                  </motion.div>
+                ) : (
+                  quests.map((quest, index) => (
                   <motion.div
                     key={quest.id}
                     className={`relative p-4 rounded-xl border-2 ${
@@ -326,7 +440,7 @@ export default function BMLabPage() {
                     <div className="flex items-start gap-3">
                       <div className={`w-12 h-12 rounded-lg ${quest.color} flex items-center justify-center flex-shrink-0`}>
                         {quest.unlocked ? (
-                          <quest.icon className="w-6 h-6 text-white" />
+                          <IconRenderer icon={quest.icon} className="w-6 h-6 text-white" />
                         ) : (
                           <Lock className="w-6 h-6 text-white" />
                         )}
@@ -355,7 +469,8 @@ export default function BMLabPage() {
                       )}
                     </div>
                   </motion.div>
-                ))}
+                  ))
+                )}
               </div>
             </motion.div>
           </div>
@@ -433,7 +548,7 @@ export default function BMLabPage() {
                     }`}>
                       {achievement.unlocked ? (
                         <>
-                          <achievement.icon className="w-6 h-6 text-white mb-1" />
+                          <IconRenderer icon={achievement.icon} className="w-6 h-6 text-white mb-1" />
                           <p className="text-[8px] font-bold text-white text-center leading-tight">{achievement.title}</p>
                         </>
                       ) : (
@@ -513,7 +628,7 @@ export default function BMLabPage() {
                   whileHover={{ rotate: 360, scale: 1.1 }}
                   transition={{ duration: 0.6 }}
                 >
-                  <feature.icon className="w-7 h-7 text-white" />
+                  <IconRenderer icon={feature.icon} className="w-7 h-7 text-white" />
                 </motion.div>
                 <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
                 <p className="text-sm text-slate-300 leading-relaxed">{feature.description}</p>

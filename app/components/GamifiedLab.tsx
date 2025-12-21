@@ -104,11 +104,14 @@ export function GamifiedLab() {
                       <Star className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">Level 12</p>
+                      <p className="text-sm text-muted-foreground">Level 3</p>
                       <p className="font-semibold text-foreground">Circuit Master</p>
                     </div>
                   </div>
-                  <div className="text-2xl font-bold text-neon-purple">2,847</div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-neon-purple">2,847</div>
+                    <p className="text-xs text-muted-foreground">XP</p>
+                  </div>
                 </div>
 
                 <div className="p-4 rounded-xl bg-card/50 border border-neon-cyan/30">

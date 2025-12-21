@@ -68,11 +68,11 @@ export function UserMenu() {
     }
   };
 
-  // Show loading placeholder to maintain layout
+  // Show loading placeholder to maintain layout - same size as login button
   if (status === "loading") {
     return (
-      <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-background/50 border border-border/50">
-        <div className="w-6 h-6 rounded-full bg-muted/50 animate-pulse border border-border/50" />
+      <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-xl bg-slate-900/85 backdrop-blur-xl border border-slate-700/50 shadow-lg shadow-black/20">
+        <div className="w-4 h-4 rounded-full bg-gradient-to-br from-muted/60 to-muted/40 animate-pulse border border-border/40 shadow-sm" />
       </div>
     );
   }
@@ -82,11 +82,31 @@ export function UserMenu() {
     return (
       <button
         onClick={handleLogin}
-        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-background/50 hover:bg-background/80 border border-border/50 hover:border-border/80 transition-all duration-200 hover:shadow-sm"
+        className="relative flex items-center gap-2.5 px-5 py-2.5 rounded-xl bg-slate-900/85 backdrop-blur-xl border border-slate-700/50 hover:border-neon-purple/50 transition-all duration-500 overflow-hidden group shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-neon-purple/10"
         aria-label="Log in"
+        style={{
+          backdropFilter: "blur(16px) saturate(180%)",
+        }}
       >
-        <LogIn className="w-4 h-4 text-muted-foreground transition-colors duration-200" />
-        <span className="text-sm font-medium text-foreground">Log In</span>
+        {/* Premium shimmer effect */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.1] to-transparent"
+          initial={{ x: "-100%" }}
+          whileHover={{ x: "100%" }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+        />
+        {/* Subtle inner glow */}
+        <div className="absolute inset-0 bg-gradient-to-br from-neon-purple/8 via-transparent to-neon-cyan/8 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {/* Inner border glow */}
+        <div className="absolute inset-0 rounded-xl border border-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <LogIn className="w-4 h-4 text-slate-300 group-hover:text-neon-purple transition-colors duration-500 relative z-10" />
+        <span className="text-sm font-semibold text-slate-100 group-hover:text-neon-purple/90 transition-colors duration-500 relative z-10 tracking-wide">Log In</span>
+        {/* Premium glow on hover */}
+        <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          style={{
+            boxShadow: "0 0 30px rgba(139, 92, 246, 0.3), inset 0 0 20px rgba(139, 92, 246, 0.15)",
+          }}
+        />
       </button>
     );
   }
@@ -103,22 +123,44 @@ export function UserMenu() {
 
   return (
     <div className="relative" ref={menuRef}>
-      {/* User Avatar Button */}
+      {/* User Avatar Button - Same size as login button */}
       <button
         onClick={() => {
           setIsOpen(!isOpen);
           play("hover");
         }}
-        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-background/50 hover:bg-background/80 border border-border/50 hover:border-border transition-all duration-200 group"
+        className="relative flex items-center gap-2.5 px-5 py-2.5 rounded-xl bg-slate-900/85 backdrop-blur-xl border border-slate-700/50 hover:border-neon-purple/50 transition-all duration-500 overflow-hidden group shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-neon-purple/10"
         aria-label="User menu"
+        style={{
+          backdropFilter: "blur(16px) saturate(180%)",
+        }}
       >
-        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-neon-purple to-neon-cyan flex items-center justify-center text-white text-xs font-semibold">
+        {/* Premium shimmer effect */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.1] to-transparent"
+          initial={{ x: "-100%" }}
+          whileHover={{ x: "100%" }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+        />
+        {/* Subtle inner glow */}
+        <div className="absolute inset-0 bg-gradient-to-br from-neon-purple/8 via-transparent to-neon-cyan/8 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {/* Inner border glow */}
+        <div className="absolute inset-0 rounded-xl border border-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <div className="w-4 h-4 rounded-full bg-gradient-to-br from-neon-purple via-neon-pink to-neon-cyan flex items-center justify-center text-white text-[9px] font-bold shadow-lg shadow-neon-purple/40 relative z-10 ring-1 ring-white/20 leading-none flex-shrink-0 min-w-[16px]">
           {userInitials}
         </div>
-        <ChevronDown
-          className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
+        <motion.div
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+          className="relative z-10"
+        >
+          <ChevronDown className="w-4 h-4 text-slate-300 group-hover:text-neon-purple transition-colors duration-500" />
+        </motion.div>
+        {/* Premium glow on hover */}
+        <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          style={{
+            boxShadow: "0 0 30px rgba(139, 92, 246, 0.3), inset 0 0 20px rgba(139, 92, 246, 0.15)",
+          }}
         />
       </button>
 
@@ -126,36 +168,68 @@ export function UserMenu() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="absolute right-0 mt-2 w-56 rounded-lg bg-card border border-border shadow-lg backdrop-blur-md z-50 overflow-hidden"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ 
+              duration: 0.3, 
+              ease: [0.4, 0, 0.2, 1],
+              opacity: { duration: 0.25 }
+            }}
+            className="absolute right-0 mt-2 w-64 rounded-2xl bg-slate-900/95 backdrop-blur-2xl border border-slate-700/60 shadow-2xl shadow-black/50 z-50 overflow-hidden"
+            style={{
+              backdropFilter: "blur(24px) saturate(200%)",
+            }}
           >
-            <div className="p-3 border-b border-border">
-              <p className="text-sm font-semibold text-foreground truncate">
+            {/* Premium gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-neon-purple/8 via-transparent to-neon-cyan/8 pointer-events-none" />
+            {/* Inner border glow */}
+            <div className="absolute inset-0 rounded-2xl border border-white/5 pointer-events-none" />
+            
+            <div className="p-4 border-b border-border/30 relative">
+              <p className="text-sm font-bold text-foreground truncate mb-1.5 tracking-wide">
                 {user.name || "User"}
               </p>
-              <p className="text-xs text-muted-foreground truncate">
+              <p className="text-xs text-muted-foreground/80 truncate font-medium">
                 {user.email}
               </p>
             </div>
 
-            <div className="p-1">
+            <div className="p-2.5 relative">
               <button
                 onClick={handleSwitchAccount}
-                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-foreground hover:bg-accent rounded-md transition-colors"
+                className="w-full flex items-center gap-3.5 px-4 py-3 text-sm text-foreground hover:bg-gradient-to-r hover:from-accent/60 hover:via-accent/40 hover:to-accent/30 rounded-xl transition-all duration-500 group relative overflow-hidden"
               >
-                <RefreshCw className="w-4 h-4" />
-                <span>Switch Account</span>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.08] to-transparent opacity-0 group-hover:opacity-100"
+                  initial={{ x: "-100%" }}
+                  whileHover={{ x: "100%" }}
+                  transition={{ duration: 0.7, ease: "easeInOut" }}
+                />
+                <RefreshCw className="w-4 h-4 text-muted-foreground group-hover:text-neon-purple transition-colors duration-500 relative z-10" />
+                <span className="relative z-10 group-hover:text-neon-purple/90 transition-colors duration-500 font-semibold tracking-wide">Switch Account</span>
+                {/* Subtle right arrow indicator */}
+                <div className="ml-auto relative z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <ChevronDown className="w-3.5 h-3.5 text-neon-purple rotate-[-90deg]" />
+                </div>
               </button>
 
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-md transition-colors"
+                className="w-full flex items-center gap-3.5 px-4 py-3 text-sm text-destructive hover:bg-destructive/15 rounded-xl transition-all duration-500 group relative overflow-hidden mt-1.5"
               >
-                <LogOut className="w-4 h-4" />
-                <span>Logout</span>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.08] to-transparent opacity-0 group-hover:opacity-100"
+                  initial={{ x: "-100%" }}
+                  whileHover={{ x: "100%" }}
+                  transition={{ duration: 0.7, ease: "easeInOut" }}
+                />
+                <LogOut className="w-4 h-4 relative z-10" />
+                <span className="relative z-10 font-semibold tracking-wide">Logout</span>
+                {/* Subtle right arrow indicator */}
+                <div className="ml-auto relative z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <ChevronDown className="w-3.5 h-3.5 text-destructive rotate-[-90deg]" />
+                </div>
               </button>
             </div>
           </motion.div>

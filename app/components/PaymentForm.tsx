@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Course } from "@shared/schema";
 import { useSound } from "@/hooks/use-sound";
-import { Loader2, AlertCircle, CheckCircle2, CreditCard, Lock } from "lucide-react";
+import { Loader2, AlertCircle, CheckCircle2, CreditCard, Lock, Shield, ShieldCheck, BadgeCheck, Verified, Mail } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Script from "next/script";
 import { clientLogger } from "@/lib/client-logger";
@@ -221,12 +221,77 @@ export function PaymentForm({ course, orderAmount, profileData, onSuccess, onCan
           </div>
         )}
 
-        {/* Security Notice */}
-        <div className="flex items-start gap-3 p-4 rounded-lg bg-muted/10 border border-border/20">
-          <Lock className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+        {/* Email Confirmation Notice */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 border border-blue-500/20"
+        >
+          <Mail className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
           <div className="text-xs text-muted-foreground">
-            <p className="font-medium mb-1">Secure Payment</p>
-            <p>Your payment is processed securely through Cashfree. We never store your payment details.</p>
+            <p className="font-semibold text-foreground mb-1">Email Confirmation</p>
+            <p>After successful payment, you'll receive a confirmation email with course access details and enrollment information.</p>
+          </div>
+        </motion.div>
+
+        {/* Premium Security Badges */}
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="flex items-center gap-2 p-3 rounded-lg bg-green-500/10 border border-green-500/20"
+            >
+              <ShieldCheck className="w-5 h-5 text-green-400 flex-shrink-0" />
+              <div>
+                <p className="text-xs font-semibold text-foreground">SSL Secured</p>
+                <p className="text-[10px] text-muted-foreground">256-bit encryption</p>
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              className="flex items-center gap-2 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20"
+            >
+              <Verified className="w-5 h-5 text-blue-400 flex-shrink-0" />
+              <div>
+                <p className="text-xs font-semibold text-foreground">PCI Compliant</p>
+                <p className="text-[10px] text-muted-foreground">Payment security</p>
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="flex items-center gap-2 p-3 rounded-lg bg-purple-500/10 border border-purple-500/20"
+            >
+              <BadgeCheck className="w-5 h-5 text-purple-400 flex-shrink-0" />
+              <div>
+                <p className="text-xs font-semibold text-foreground">Cashfree</p>
+                <p className="text-[10px] text-muted-foreground">Trusted gateway</p>
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 }}
+              className="flex items-center gap-2 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20"
+            >
+              <Lock className="w-5 h-5 text-amber-400 flex-shrink-0" />
+              <div>
+                <p className="text-xs font-semibold text-foreground">No Storage</p>
+                <p className="text-[10px] text-muted-foreground">We don't save cards</p>
+              </div>
+            </motion.div>
+          </div>
+          <div className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-r from-slate-800/50 to-slate-900/50 border border-border/30 backdrop-blur-sm">
+            <Shield className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
+            <div className="text-xs text-muted-foreground">
+              <p className="font-semibold text-foreground mb-1">100% Secure Payment</p>
+              <p>Your payment is processed securely through Cashfree's PCI-DSS compliant infrastructure. We never store or access your payment details.</p>
+            </div>
           </div>
         </div>
 
@@ -243,27 +308,34 @@ export function PaymentForm({ course, orderAmount, profileData, onSuccess, onCan
               Cancel
             </Button>
           )}
-          <Button
+          <motion.button
             type="submit"
             disabled={loading || !profileData}
-            className="flex-1 h-12 font-semibold text-background hover:opacity-90 transition-all shadow-lg"
+            className="flex-1 h-12 font-semibold text-white rounded-lg transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
-              background: `linear-gradient(135deg, ${course.neonColor}, ${course.neonColor}dd)`,
-              boxShadow: `0 4px 20px -4px ${course.neonColor}50`,
+              background: loading || !profileData 
+                ? 'linear-gradient(135deg, #64748b, #475569)'
+                : `linear-gradient(135deg, ${course.neonColor}, ${course.neonColor}dd)`,
+              boxShadow: loading || !profileData 
+                ? 'none'
+                : `0 4px 20px -4px ${course.neonColor}50`,
             }}
+            whileHover={!loading && profileData ? { scale: 1.02 } : {}}
+            whileTap={!loading && profileData ? { scale: 0.98 } : {}}
           >
             {loading ? (
               <>
-                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                Processing...
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span>Processing Payment...</span>
               </>
             ) : (
               <>
-                <CreditCard className="w-5 h-5 mr-2" />
-                Pay ₹{orderAmount.toLocaleString("en-IN")}
+                <ShieldCheck className="w-5 h-5" />
+                <span>Proceed to Secure Payment</span>
+                <span className="text-sm opacity-90">₹{orderAmount.toLocaleString("en-IN")}</span>
               </>
             )}
-          </Button>
+          </motion.button>
         </div>
       </form>
     </>

@@ -17,6 +17,7 @@ import DarkVeil from "@/components/DarkVeil";
 import Nav from "@/components/Nav";
 import ScrollRestoration from "./scroll-restoration";
 import { TestimonialSlider } from "./components/TestimonialSlider";
+import { LabPreview } from "./components/LabPreview";
 
 export default function HomePage() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -72,6 +73,7 @@ export default function HomePage() {
           <OriginStory />
           <TestimonialSlider />
           <WhyChooseUs />
+          <LabPreview />
           <GamifiedLab />
         </main>
     

@@ -6,7 +6,7 @@
  */
 
 interface StructuredDataProps {
-  type: "Organization" | "WebSite" | "Course" | "BreadcrumbList";
+  type: "Organization" | "WebSite" | "Course" | "BreadcrumbList" | "FAQPage" | "AggregateRating" | "Review";
   data: Record<string, unknown>;
 }
 
@@ -89,6 +89,52 @@ export function StructuredData({ type, data }: StructuredDataProps) {
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           itemListElement: data.items || [],
+        };
+
+      case "FAQPage":
+        return {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: (data.faqs || []).map((faq: { q: string; a: string }) => ({
+            "@type": "Question",
+            name: faq.q,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: faq.a,
+            },
+          })),
+        };
+
+      case "AggregateRating":
+        return {
+          "@context": "https://schema.org",
+          "@type": "AggregateRating",
+          ratingValue: data.ratingValue || "4.9",
+          reviewCount: data.reviewCount || "120",
+          bestRating: "5",
+          worstRating: "1",
+        };
+
+      case "Review":
+        return {
+          "@context": "https://schema.org",
+          "@type": "Review",
+          author: {
+            "@type": "Person",
+            name: data.authorName || "Student",
+          },
+          datePublished: data.datePublished || new Date().toISOString(),
+          reviewBody: data.reviewBody || "",
+          reviewRating: {
+            "@type": "Rating",
+            ratingValue: data.ratingValue || "5",
+            bestRating: "5",
+            worstRating: "1",
+          },
+          itemReviewed: data.itemReviewed || {
+            "@type": "Course",
+            name: data.courseName || "Course",
+          },
         };
 
       default:

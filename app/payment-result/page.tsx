@@ -4,7 +4,7 @@ import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CheckCircle2, XCircle, Loader2, ArrowLeft, Home } from "lucide-react";
+import { CheckCircle2, XCircle, Loader2, ArrowLeft, Home, Mail, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import DarkVeil from "@/components/DarkVeil";
@@ -111,16 +111,46 @@ function PaymentResultContent() {
                   >
                     <CheckCircle2 className="w-12 h-12 text-green-500" />
                   </motion.div>
-                  <h1 className="text-3xl md:text-4xl font-display font-bold mb-4 text-green-500">
-                    Payment Successful! 🎉
-                  </h1>
-                  <p className="text-lg text-muted-foreground mb-6">
-                    Your enrollment has been confirmed. You'll receive a confirmation email shortly.
-                  </p>
-                  {orderId && (
-                    <p className="text-sm text-muted-foreground mb-8">
-                      Order ID: <span className="font-mono">{orderId}</span>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="mb-6"
+                  >
+                    <h1 className="text-3xl md:text-4xl font-display font-bold mb-4 bg-gradient-to-r from-green-400 via-green-500 to-emerald-500 bg-clip-text text-transparent">
+                      Payment Successful! 🎉
+                    </h1>
+                    <p className="text-lg text-foreground mb-4 font-medium">
+                      Your enrollment has been confirmed!
                     </p>
+                  </motion.div>
+                  
+                  {/* Email Confirmation Notice */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 border border-blue-500/20 mb-6"
+                  >
+                    <Mail className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                    <div className="text-left">
+                      <p className="text-sm font-semibold text-foreground mb-1">Confirmation Email Sent</p>
+                      <p className="text-xs text-muted-foreground">
+                        We've sent a detailed confirmation email with your order details, course access information, and next steps. Please check your inbox (and spam folder).
+                      </p>
+                    </div>
+                  </motion.div>
+
+                  {orderId && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.4 }}
+                      className="p-4 rounded-lg bg-slate-800/50 border border-slate-700/50 mb-8"
+                    >
+                      <p className="text-xs text-muted-foreground mb-1">Order Reference</p>
+                      <p className="text-sm font-mono text-foreground font-semibold">{orderId}</p>
+                    </motion.div>
                   )}
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Button
