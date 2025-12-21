@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Script from "next/script";
 import { clientLogger } from "@/lib/client-logger";
 import type { ProfileData } from "./ProfileSetup";
+import { handleApiError, isRetryableError, calculateRetryDelay } from "@/lib/error-handler";
 
 interface PaymentFormProps {
   course: Course;
@@ -32,6 +33,7 @@ export function PaymentForm({ course, orderAmount, profileData, onSuccess, onCan
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [cashfreeLoaded, setCashfreeLoaded] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     if (!profileData) {
@@ -112,13 +114,16 @@ export function PaymentForm({ course, orderAmount, profileData, onSuccess, onCan
       });
 
       play("success");
+      setRetryCount(0);
       onSuccess?.();
     } catch (err) {
+      const appError = handleApiError(err, "Payment initialization");
       clientLogger.error("Payment initialization failed", err, {
         courseId: course.id,
         orderAmount,
+        retryCount,
       });
-      setError(err instanceof Error ? err.message : "Payment initialization failed. Please try again.");
+      setError(appError.message);
     } finally {
       setLoading(false);
     }

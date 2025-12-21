@@ -1,0 +1,3 @@
+# Drizzle Migrations Directory
+# Migration files will be generated here when you run: npm run db:generate
+

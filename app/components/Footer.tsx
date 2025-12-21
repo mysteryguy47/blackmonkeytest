@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Heart, Mail, MapPin, Phone, Instagram, Linkedin, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Button1 } from "@/components/ui/button1";
 import { Input } from "@/components/ui/input";
 import { ArrowUp } from "lucide-react";
 
@@ -229,7 +228,7 @@ export function Footer() {
 
       {/* Scroll To Top Button - Fixed Position Bottom Right */}
       <div className="fixed bottom-16 right-6 md:bottom-20 md:right-8 z-50">
-        <Button1
+        <Button
           onClick={scrollToTop}
           size="icon"
           variant="outline"
@@ -237,7 +236,7 @@ export function Footer() {
           data-testid="button-scroll-top"
         >
           <ArrowUp className="h-5 w-5" />
-        </Button1>
+        </Button>
       </div>
     </footer>
   );

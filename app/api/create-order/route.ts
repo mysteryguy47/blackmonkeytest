@@ -44,6 +44,19 @@ export async function POST(request: NextRequest) {
   const startTime = Date.now();
   
   try {
+    // Verify authentication
+    const session = await getServerSession(authOptions);
+    
+    if (!session || !session.user) {
+      logger.warn("Unauthorized order creation attempt", {
+        hasSession: !!session,
+      });
+      return NextResponse.json(
+        { error: "Authentication required. Please log in to continue." },
+        { status: 401 }
+      );
+    }
+
     // Parse and validate request body
     const body = await request.json();
     
@@ -95,9 +108,14 @@ export async function POST(request: NextRequest) {
 
     const { CASHFREE_APP_ID: cashfreeAppId, CASHFREE_SECRET_KEY: cashfreeSecretKey, NEXT_PUBLIC_BASE_URL: baseUrl } = env;
 
+    // Determine Cashfree environment from env var (defaults to production)
+    const cashfreeEnv = process.env.CASHFREE_ENV === "sandbox" 
+      ? CFEnvironment.SANDBOX 
+      : CFEnvironment.PRODUCTION;
+
     // Initialize Cashfree SDK
     const cf = new Cashfree(
-      CFEnvironment.PRODUCTION,
+      cashfreeEnv,
       cashfreeAppId,
       cashfreeSecretKey
     );

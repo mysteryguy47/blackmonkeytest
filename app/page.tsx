@@ -18,8 +18,9 @@ import Nav from "@/components/Nav";
 import ScrollRestoration from "./scroll-restoration";
 import { TestimonialSlider } from "./components/TestimonialSlider";
 import { LabPreview } from "./components/LabPreview";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
-export default function HomePage() {
+function HomePageContent() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -84,7 +85,14 @@ export default function HomePage() {
         />
       </div>
     );
-    
+}
+
+export default function HomePage() {
+  return (
+    <ErrorBoundary>
+      <HomePageContent />
+    </ErrorBoundary>
+  );
 }
 
 

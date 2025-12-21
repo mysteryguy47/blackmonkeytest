@@ -12,6 +12,7 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import DarkVeil from "@/components/DarkVeil";
 import { Footer } from "@/components/Footer";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 export default function PaymentPage() {
   const params = useParams();

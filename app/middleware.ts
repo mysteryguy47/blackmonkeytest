@@ -1,26 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-
-/**
- * Rate Limiting Store
- * In-memory store for rate limiting (use Redis in production for distributed systems)
- */
-const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
-
-/**
- * Rate limit configuration
- */
-const RATE_LIMIT_CONFIG = {
-  // API routes: 10 requests per minute per IP
-  api: {
-    maxRequests: 10,
-    windowMs: 60 * 1000, // 1 minute
-  },
-  // General routes: 100 requests per minute per IP
-  general: {
-    maxRequests: 100,
-    windowMs: 60 * 1000, // 1 minute
-  },
-};
+import { checkRateLimit } from "@/lib/rate-limit-redis";
 
 /**
  * Get client IP address from request
@@ -37,63 +16,6 @@ function getClientIP(request: NextRequest): string {
   
   // Fallback if no IP found
   return "unknown";
-}
-
-/**
- * Check if request exceeds rate limit
- */
-function checkRateLimit(
-  ip: string,
-  pathname: string
-): { allowed: boolean; remaining: number; resetTime: number } {
-  // Determine rate limit config based on path
-  const isApiRoute = pathname.startsWith("/api/");
-  const config = isApiRoute ? RATE_LIMIT_CONFIG.api : RATE_LIMIT_CONFIG.general;
-  
-  const key = `${ip}:${pathname}`;
-  const now = Date.now();
-  const record = rateLimitStore.get(key);
-  
-  // Clean up expired entries periodically (simple cleanup)
-  if (rateLimitStore.size > 10000) {
-    for (const [k, v] of rateLimitStore.entries()) {
-      if (v.resetTime < now) {
-        rateLimitStore.delete(k);
-      }
-    }
-  }
-  
-  if (!record || record.resetTime < now) {
-    // New window or expired, reset
-    rateLimitStore.set(key, {
-      count: 1,
-      resetTime: now + config.windowMs,
-    });
-    return {
-      allowed: true,
-      remaining: config.maxRequests - 1,
-      resetTime: now + config.windowMs,
-    };
-  }
-  
-  if (record.count >= config.maxRequests) {
-    // Rate limit exceeded
-    return {
-      allowed: false,
-      remaining: 0,
-      resetTime: record.resetTime,
-    };
-  }
-  
-  // Increment count
-  record.count++;
-  rateLimitStore.set(key, record);
-  
-  return {
-    allowed: true,
-    remaining: config.maxRequests - record.count,
-    resetTime: record.resetTime,
-  };
 }
 
 /**
@@ -201,9 +123,9 @@ export function middleware(request: NextRequest) {
     });
   }
   
-  // Check rate limiting
+  // Check rate limiting (using async Redis-based rate limiting)
   const clientIP = getClientIP(request);
-  const rateLimitResult = checkRateLimit(clientIP, pathname);
+  const rateLimitResult = await checkRateLimit(clientIP, pathname);
   
   if (!rateLimitResult.allowed) {
     const response = NextResponse.json(
@@ -245,11 +167,7 @@ export function middleware(request: NextRequest) {
   }
   
   // Add rate limit info headers
-  response.headers.set("X-RateLimit-Limit", String(
-    pathname.startsWith("/api/") 
-      ? RATE_LIMIT_CONFIG.api.maxRequests 
-      : RATE_LIMIT_CONFIG.general.maxRequests
-  ));
+  response.headers.set("X-RateLimit-Limit", String(maxRequests));
   response.headers.set("X-RateLimit-Remaining", String(rateLimitResult.remaining));
   response.headers.set("X-RateLimit-Reset", String(rateLimitResult.resetTime));
   
