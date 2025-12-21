@@ -93,11 +93,19 @@ export function handleApiError(error: unknown, context?: string): AppError {
  * Format error for API response
  */
 export function formatErrorResponse(error: AppError, includeDetails = false) {
-  return {
+  const response: Record<string, unknown> = {
     error: error.message,
-    ...(error.code && { code: error.code }),
-    ...(includeDetails && error.details && { details: error.details }),
   };
+  
+  if (error.code) {
+    response.code = error.code;
+  }
+  
+  if (includeDetails && error.details) {
+    response.details = error.details;
+  }
+  
+  return response;
 }
 
 /**
