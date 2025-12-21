@@ -1,16 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Wrench, Home, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-export const metadata = {
-  title: "Maintenance Mode - BlackMonkey",
-  description: "We're currently performing scheduled maintenance. We'll be back soon!",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
 
 export default function MaintenancePage() {
   return (
